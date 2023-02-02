@@ -1,4 +1,24 @@
+using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Mvc.Razor;
+using System.Globalization;
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddLocalization(option => { option.ResourcesPath = "Resource"; });
+builder.Services.AddMvc().AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix).AddDataAnnotationsLocalization();
+
+builder.Services.Configure<RequestLocalizationOptions>(option =>
+{
+    var vSupportCultures = new List<CultureInfo>
+                    {
+                        new CultureInfo("en"),
+                        new CultureInfo("pt-BR"),
+                        new CultureInfo("es")
+                    };
+    option.DefaultRequestCulture = new RequestCulture("en");
+    option.SupportedCultures = vSupportCultures;
+    option.SupportedUICultures = vSupportCultures;
+});
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

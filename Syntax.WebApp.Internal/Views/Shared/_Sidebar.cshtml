@@ -1,5 +1,42 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿<aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <a href="" class="brand-link">
+        <img src="~/img/Icon.jpg" alt="Syntax" class="brand-image img-circle elevation-3" style="opacity: .8">
+        <span class="brand-text font-weight-light">Syntax</span>
+    </a>
+    <div class="sidebar">
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+            <div class="image">
+                <img src="~/img/UserIcon.png" class="img-circle elevation-2" alt="User Image">
+            </div>
+            <div class="info">
+                <a href="#" class="d-block">User</a>
+            </div>
+        </div>
+        <div class="form-inline">
+            <div class="input-group" data-widget="sidebar-search">
+                <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
+                <div class="input-group-append">
+                    <button class="btn btn-sidebar">
+                        <i class="fas fa-search fa-fw"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <nav class="mt-2">
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                <li class="nav-item" policies="Home">
+                    <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index"><i class="nav-icon fas fa-tachometer-alt"></i><p>@Localizer["Home"]</p></a>
+                </li>
+                <li class="nav-item" policies="Transaction Category">
+                    <a class="nav-link" asp-area="" asp-controller="TransactionCategory" asp-action="Index"><i class="nav-icon fa fa-list"></i><p>@Localizer["Transaction Category"]</p></a>
+                </li>
+                <li class="nav-item" policies="Asset Class">
+                    <a class="nav-link" asp-area="" asp-controller="AssetClass" asp-action="Index"><i class="nav-icon fas fa-edit"></i><p>@Localizer["AssetClass"]</p></a>
+                </li>
+                <li class="nav-item" policies="Asset">
+                    <a class="nav-link" asp-area="" asp-controller="Asset" asp-action="Index"><i class="nav-icon fa fa-globe"></i><p>@Localizer["Asset"]</p></a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</aside>

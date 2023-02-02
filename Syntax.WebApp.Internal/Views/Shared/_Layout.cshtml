@@ -4,46 +4,66 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Syntax</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/Syntax.WebApp.Internal.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback" />
+    <link rel="stylesheet" href="~/lib/fontawesome-free/css/all.min.css" />
+    <link rel="stylesheet" href="~/lib/admin-lte/css/adminlte.min.css" />
+    <link rel="stylesheet" href="~/lib/overlayScrollbars/css/OverlayScrollbars.min.css" />
+    <link rel="stylesheet" href="~/lib/jquery-ui/jquery-ui.min.css" type="text/css" />
+    <link rel="stylesheet" href="~/lib/select2/css/select2.min.css" />
+
+    <link rel="stylesheet" href="~/lib/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css" />
+    <link rel="stylesheet" href="~/lib/toastr/toastr.min.css" />
+
+    <link rel="stylesheet" href="~/css/site.css" />
+
+    @await RenderSectionAsync("Css", required: false)
 </head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Syntax.WebApp.Internal</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+<body class="hold-transition sidebar-mini" style="height: auto;">
+    @Html.HiddenFor(m => System.Globalization.CultureInfo.CurrentCulture.Name)
+    @Html.HiddenFor(m => System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator)
+    @Html.HiddenFor(m => System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberGroupSeparator)
+
+    <input type="hidden" id="CurrentCultureName" value="@System.Globalization.CultureInfo.CurrentCulture.Name" />
+    <input type="hidden" id="CurrentCultureDecimal" value="@System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator" />
+    <input type="hidden" id="CurrentCultureGroup" value="@System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberGroupSeparator" />
+
+    <!-- MENSAGEM DE ERRO -->
+    <input type="hidden" id="success" value="@TempData["success"]" />
+    <input type="hidden" id="info" value="@TempData["info"]" />
+    <input type="hidden" id="warning" value="@TempData["warning"]" />
+    <input type="hidden" id="error" value="@TempData["error"]" />
+
+    <div class="wrapper">
+        <div class="preloader flex-column justify-content-center align-items-center">
+            <img class="animation__shake" src="~/img/Logo.jpg" alt="Syntax" />
+        </div>
+        @await Html.PartialAsync("_Navbar")
+        @await Html.PartialAsync("_Sidebar")
+        @RenderBody()
+        @await Html.PartialAsync("_Footer")
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2023 - Syntax.WebApp.Internal - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/lib/jquery/jquery.min.js"></script>
+    <script src="~/lib/jquery-ui/jquery-ui.min.js"></script>
+    <script>
+        $.widget.bridge('uibutton', $.ui.button);
+    </script>
+    <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+    <script src="~/lib/admin-lte/js/adminlte.min.js"></script>
+    <script src="~/lib/moment/moment.min.js"></script>
+    <script src="~/lib/moment/locale/pt-br.js"></script>
+    <script src="~/lib/moment/locale/en-in.js"></script>
+    <script src="~/lib/moment/locale/es.js"></script>
+    <script src="~/lib/inputmask/inputmask.min.js"></script>
+    <script src="~/lib/inputmask/jquery.inputmask.min.js"></script>
+    <script src="~/lib/jquery-maskmoney/dist/jquery.maskMoney.min.js"></script>
+    <script src="~/lib/select2/js/select2.full.min.js"></script>
+    <script src="~/lib/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+    <script src="~/lib/toastr/toastr.min.js"></script>
+
+    <script src="~/js/site.js"></script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
