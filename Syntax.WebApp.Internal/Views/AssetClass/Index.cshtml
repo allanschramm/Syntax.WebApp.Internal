@@ -1,38 +1,88 @@
-﻿@{
+﻿@model IEnumerable<Syntax.Models.AssetClass>
+
+@{
     ViewData["Title"] = "Asset Class";
 }
+
 
 <div class="content-wrapper">
     <div class="content-header">
         <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-sm-6">
-                    <h1 class="m-0">@Localizer["Asset Class"]</h1>
+            <div class="row mb-3">
+                <div class="col-sm">
+                    <h1 class="m-0">@Localizer["Transaction Class"]</h1>
                 </div>
-                <div class="col-sm-6">
+                <div class="col-sm">
+                    <div class="breadcrumb float-sm-right">
+                        <a class="btn fa fa-edit" asp-action="Create">Create New</a>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm">
+                    <table class="table table-bordered table-striped text-sm">
+                        <thead>
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Id)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Name)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Description)
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Id)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Name)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Description)
+                                    </td>
+                                    <td>
+                                        <a asp-action="Edit" asp-route-id="@item.Id">@Localizer["Edit"]</a> |                                        
+                                        <a asp-action="Delete" asp-route-id="@item.Id">@Localizer["Delete"]</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
 </div>
 
 @section Scripts {
-        <script src="~/lib/daterangepicker/daterangepicker.js"></script>
+    <script src="~/lib/daterangepicker/daterangepicker.js"></script>
 
-        <!-- DataTables  & Plugins -->
-        <script src="~/lib/datatables/jquery.dataTables.min.js"></script>
-        <script src="~/lib/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
-        <script src="~/lib/datatables-responsive/js/dataTables.responsive.min.js"></script>
-        <script src="~/lib/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
-        <script src="~/lib/datatables-buttons/js/dataTables.buttons.min.js"></script>
-        <script src="~/lib/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
-        <script src="~/lib/jszip/jszip.min.js"></script>
-        <script src="~/lib/pdfmake/pdfmake.min.js"></script>
-        <script src="~/lib/pdfmake/vfs_fonts.js"></script>
-        <script src="~/lib/datatables-buttons/js/buttons.html5.min.js"></script>
-        <script src="~/lib/datatables-buttons/js/buttons.print.min.js"></script>
-        <script src="~/lib/datatables-buttons/js/buttons.colVis.min.js"></script>
-        <script src="~/lib/chart.js/Chart.min.js"></script>
-        <script src="~/lib/pqgridf/pqgrid.min.js"></script>
-        <script src="~/lib/pqgridf/localize/pq-localize-pt-br.min.js"></script>
+    <!-- DataTables  & Plugins -->
+    <script src="~/lib/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/lib/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/lib/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/lib/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="~/lib/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="~/lib/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+    <script src="~/lib/jszip/jszip.min.js"></script>
+    <script src="~/lib/pdfmake/pdfmake.min.js"></script>
+    <script src="~/lib/pdfmake/vfs_fonts.js"></script>
+    <script src="~/lib/datatables-buttons/js/buttons.html5.min.js"></script>
+    <script src="~/lib/datatables-buttons/js/buttons.print.min.js"></script>
+    <script src="~/lib/datatables-buttons/js/buttons.colVis.min.js"></script>
+    <script src="~/lib/chart.js/Chart.min.js"></script>
+    <script src="~/lib/pqgridf/pqgrid.min.js"></script>
+    <script src="~/lib/pqgridf/localize/pq-localize-pt-br.min.js"></script>
 }

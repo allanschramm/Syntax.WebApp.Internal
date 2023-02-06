@@ -1,14 +1,43 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Syntax.Models;
+using System.Net.Http.Headers;
 
 namespace Syntax.WebApp.Internal.Controllers
 {
     public class TransactionClassController : Controller
     {
-        // GET: TransactionClassController
-        public ActionResult Index()
+        HttpClient client;
+
+        public TransactionClassController(IHttpClientFactory factory)
         {
-            return View();
+            client = factory.CreateClient();
+        }
+
+        // GET: TransactionClassController
+        public async Task<ActionResult> Index()
+        {
+            client.BaseAddress = new Uri("http://localhost:5069");
+            client.DefaultRequestHeaders.Accept.Add(new
+                MediaTypeWithQualityHeaderValue("application/json"));
+
+            try
+            {
+                HttpResponseMessage response = client.GetAsync("api/transactionclass").Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    var listTC = await response.Content.ReadAsAsync<TransactionClass[]>();
+                    return View(listTC.ToList());
+                }
+                else
+                {
+                    throw new Exception("Ocorreu um erro na listagem!");
+                }
+            }
+            catch (Exception ex)
+            {
+                return View("_Erro", ex);
+            }
         }
 
         // GET: TransactionClassController/Details/5

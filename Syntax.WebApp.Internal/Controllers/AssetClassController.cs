@@ -1,14 +1,43 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Syntax.Models;
+using System.Net.Http.Headers;
 
 namespace Syntax.WebApp.Internal.Controllers
 {
     public class AssetClassController : Controller
     {
-        // GET: AssetClassController
-        public ActionResult Index()
+        HttpClient client;
+
+        public AssetClassController(IHttpClientFactory factory)
         {
-            return View();
+            client = factory.CreateClient();
+        }
+
+        // GET: AssetClassController
+        public async Task<ActionResult> Index()
+        {
+            client.BaseAddress = new Uri("http://localhost:5069");
+            client.DefaultRequestHeaders.Accept.Add(new
+                MediaTypeWithQualityHeaderValue("application/json"));
+
+            try
+            {
+                HttpResponseMessage response = client.GetAsync("api/assetclass").Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    var listAC = await response.Content.ReadAsAsync<AssetClass[]>();
+                    return View(listAC.ToList());
+                }
+                else
+                {
+                    throw new Exception("Ocorreu um erro na listagem!");
+                }
+            }
+            catch (Exception ex)
+            {
+                return View("_Erro", ex);
+            }
         }
 
         // GET: AssetClassController/Details/5
