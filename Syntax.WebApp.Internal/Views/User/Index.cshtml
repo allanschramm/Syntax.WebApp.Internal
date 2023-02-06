@@ -1,19 +1,87 @@
-﻿@{
+﻿@model IEnumerable<Syntax.Models.User>
+
+@{
     ViewData["Title"] = "User";
 }
 
 <div class="content-wrapper">
     <div class="content-header">
         <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-sm-6">
+            <div class="row mb-3">
+                <div class="col-sm">
                     <h1 class="m-0">@Localizer["User"]</h1>
                 </div>
-                <div class="col-sm-6">
+                <div class="col-sm">
+                    <div class="breadcrumb float-sm-right">
+                        <a class="btn fa fa-edit" asp-action="Create">Create New</a>
+                    </div>                    
                 </div>
             </div>
         </div>
     </div>
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm">
+                    <table class="table table-bordered table-striped text-sm">
+                        <thead>
+                            <tr>
+
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Name)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Email)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Role)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.CreationDate)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.LastAccessDate)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.IsEmailConfirmed)
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Name)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Email)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Role)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.CreationDate)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.LastAccessDate)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.IsEmailConfirmed)
+                                    </td>
+                                    <td>
+                                        <a asp-action="Edit" asp-route-id="@item.Id">@Localizer["Edit"]</a> |                                        
+                                        <a asp-action="Delete" asp-route-id="@item.Id">@Localizer["Delete"]</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
 </div>
 
 @section Scripts {
