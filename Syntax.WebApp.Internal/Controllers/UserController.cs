@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Syntax.Models;
+using Newtonsoft.Json;
+using Syntax.WebApp.Internal.Models;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -8,13 +10,15 @@ using System.Text.Json;
 
 namespace Syntax.WebApp.Internal.Controllers
 {
-    public class UserController : Controller
+    public class UserController : BaseController
     {
         HttpClient client;
 
-        public UserController(IHttpClientFactory factory)
+        public UserController(IHttpClientFactory factory, ILogger<BaseController> baseLogger, IHttpContextAccessor httpContextAccessor)
+            : base(baseLogger, httpContextAccessor)
         {
             client = factory.CreateClient();
+
         }
 
         // GET: UserController
@@ -50,112 +54,206 @@ namespace Syntax.WebApp.Internal.Controllers
         }
 
         // GET: UserController/Create
-        public ActionResult Create()
+        public ActionResult CreateAsync()
         {
-            return View();
+            return PartialView();
         }
 
         // POST: UserController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<ActionResult> CreateAsync(User user)
         {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: UserController/Edit/5
-        public async Task<ActionResult> Edit(int id)
-        {
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
             client.BaseAddress = new Uri("http://localhost:5069");
-            client.DefaultRequestHeaders.Accept.Add(new
-                MediaTypeWithQualityHeaderValue("application/json"));
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
             try
             {
-                HttpResponseMessage response = client.GetAsync("api/user" + $"/{id}").Result;
-                if (response.IsSuccessStatusCode)
-                {
-                    var User = await response.Content.ReadAsAsync<User>();
-                    return View(User);
-                }
-                else
-                {
-                    throw new Exception("Ocorreu um erro na listagem!");
-                }
-            }
-            catch (Exception ex)
-            {
-                return View("_Error", ex);
-            }
-        }
-
-        // POST: UserController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(int id, User user)
-        {
-            client.BaseAddress = new Uri("http://localhost:5069");
-
-            try
-            {
-                var newUser = new User { 
-                    Id = user.Id,
-                    Name = user.Name,
-                    Email = user.Email,
-                    Password = user.Password,
-                    Role = user.Role,
-                    CreationDate = DateTime.Now,
-                    LastAccessDate = null,
-                    IsEmailConfirmed = false };
-                var json = JsonSerializer.Serialize(newUser);
+                var json = System.Text.Json.JsonSerializer.Serialize(user);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                var response = await client.PostAsync("http://localhost:5069/api/user/", content);
+                var response = await client.PostAsync("api/user/register", content);
 
                 if (response.IsSuccessStatusCode)
                 {
                     // Sucesso
                     return RedirectToAction(nameof(Index));
                 }
+                if (response.StatusCode == HttpStatusCode.BadRequest)
+                {
+                    var jsonErr = await response.Content.ReadAsStringAsync();
+                    var apiError = System.Text.Json.JsonSerializer.Deserialize<ApiError>(jsonErr, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
+
+                    var errorMessages = new List<string>();
+                    foreach (var error in apiError.Errors)
+                    {
+                        foreach (var message in error.Value)
+                        {
+                            var errorMessageWithTitle = $"{error.Key}: {message}";
+                            errorMessages.Add(errorMessageWithTitle);
+                        }
+                    }
+
+                    TempData["ErrorMessages"] = errorMessages.ToArray();
+                }
                 else
                 {
                     // Falha
                     throw new Exception("Ocorreu um erro na listagem!");
                 }
-
             }
             catch
             {
-                return View();
+                return RedirectToAction(nameof(Index));
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
+
+        // GET: UserController/Edit/5
+        public async Task<ActionResult> Edit(string id)
+        {
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+            client.BaseAddress = new Uri("http://localhost:5069");
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            var response = await client.GetAsync($"api/User/{id}");
+            if (response.IsSuccessStatusCode)
+            {
+                var user = await response.Content.ReadAsAsync<User>();
+
+                // Chama a view de confirmação de deleção passando o objeto como parâmetro
+                return PartialView(user);
+            }
+            else
+            {
+                TempData["ErrorMessages"] = "Erro ao localizar o User !";
+                return RedirectToAction(nameof(Index));
             }
         }
 
-        // GET: UserController/Delete/5
-        public ActionResult Delete(int id)
+        // POST: UserController/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Edit(User user)
         {
-            return View();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+            client.BaseAddress = new Uri("http://localhost:5069");
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            try
+            {
+                var json = System.Text.Json.JsonSerializer.Serialize(user);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                var response = await client.PutAsync("api/user", content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    // Sucesso
+                    return RedirectToAction(nameof(Index));
+                }
+                if (response.StatusCode == HttpStatusCode.BadRequest)
+                {
+                    var jsonErr = await response.Content.ReadAsStringAsync();
+                    var apiError = System.Text.Json.JsonSerializer.Deserialize<ApiError>(jsonErr, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
+
+                    var errorMessages = new List<string>();
+                    foreach (var error in apiError.Errors)
+                    {
+                        foreach (var message in error.Value)
+                        {
+                            var errorMessageWithTitle = $"{error.Key}: {message}";
+                            errorMessages.Add(errorMessageWithTitle);
+                        }
+                    }
+
+                    TempData["ErrorMessages"] = errorMessages.ToArray();
+                }
+                else
+                {
+                    // Falha
+                    throw new Exception("Ocorreu um erro na listagem!");
+                }
+            }
+            catch
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        // GET: UserController/Delete/5
+        public async Task<ActionResult> Delete(string id)
+        {
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+            client.BaseAddress = new Uri("http://localhost:5069");
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            var response = await client.GetAsync($"api/User/{id}");
+            if (response.IsSuccessStatusCode)
+            {
+                var user = await response.Content.ReadAsAsync<User>();
+
+                // Chama a view de confirmação de deleção passando o objeto como parâmetro
+                return PartialView(user);
+            }
+            else
+            {
+                TempData["ErrorMessages"] = "Erro ao localizar o User !";
+                return RedirectToAction(nameof(Index));
+            }
+
         }
 
         // POST: UserController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public async Task<ActionResult> DeleteAsync(string id)
         {
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+            client.BaseAddress = new Uri("http://localhost:5069");
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             try
             {
-                return RedirectToAction(nameof(Index));
+                var response = await client.DeleteAsync($"api/user/{id}");
+                if (response.IsSuccessStatusCode)
+                {
+                    // Sucesso
+                    return RedirectToAction(nameof(Index));
+                }
+                if (response.StatusCode == HttpStatusCode.BadRequest)
+                {
+                    var jsonErr = await response.Content.ReadAsStringAsync();
+                    var apiError = System.Text.Json.JsonSerializer.Deserialize<ApiError>(jsonErr, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
+
+                    var errorMessages = new List<string>();
+                    foreach (var error in apiError.Errors)
+                    {
+                        foreach (var message in error.Value)
+                        {
+                            var errorMessageWithTitle = $"{error.Key}: {message}";
+                            errorMessages.Add(errorMessageWithTitle);
+                        }
+                    }
+
+                    TempData["ErrorMessages"] = errorMessages.ToArray();
+                }
+                else
+                {
+                    // Falha
+                    throw new Exception("Ocorreu um erro na listagem!");
+                }
             }
             catch
             {
-                return View();
+                return RedirectToAction(nameof(Index));
             }
+
+            return RedirectToAction(nameof(Index));
         }
+
     }
+
 }

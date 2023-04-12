@@ -1,61 +1,49 @@
-﻿@model Syntax.Models.User
+﻿@model User
 
 @{
     ViewData["Title"] = "Edit";
 }
 
-<div class="content-wrapper">
-    <div class="content-header">
-        <div class="container-fluid">
-            <div class="row mb-3">
-                <div class="col-sm">
-                    <h1 class="m-0">@Localizer["Edit"]</h1>
+<section class="content">
+    <div class="row">
+        <div class="col-sm">
+            <div class="row">
+                <div class="col-md">
+                    <form asp-action="Edit">
+                        <input type="hidden" asp-for="Id" />
+
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input type="hidden" asp-for="Id" />
+                        <input type="hidden" asp-for="Password" />
+                        <input type="hidden" asp-for="CreationDate" />
+                        <input type="hidden" asp-for="LastAccessDate" />
+                        <input type="hidden" asp-for="IsEmailConfirmed" />
+                        <div class="form-group">
+                            <label asp-for="Name" class="control-label"></label>
+                            <input asp-for="Name" class="form-control" />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Email" class="control-label"></label>
+                            <input asp-for="Email" class="form-control" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Role" class="control-label"></label>
+                            <input asp-for="Role" class="form-control" />
+                            <span asp-validation-for="Role" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <a asp-action="Index" class="btn btn-secondary">@Localizer["Back"]</a>
+                            <input type="submit" value="@Localizer["Save"]" class="btn btn-primary" />
+                        </div>
+                    </form>
                 </div>
             </div>
+
         </div>
     </div>
-    <section class="content">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-sm">
-                    <div class="row">
-                        <div class="col-md-4">
-                            <form asp-action="Edit">
-                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                                <input type="hidden" asp-for="Id" />
-                                <input type="hidden" asp-for="Password" />
-                                <input type="hidden" asp-for="CreationDate" />
-                                <input type="hidden" asp-for="LastAccessDate" />
-                                <input type="hidden" asp-for="IsEmailConfirmed" />
-                                <div class="form-group">
-                                    <label asp-for="Name" class="control-label"></label>
-                                    <input asp-for="Name" class="form-control" />
-                                    <span asp-validation-for="Name" class="text-danger"></span>
-                                </div>
-                                <div class="form-group">
-                                    <label asp-for="Email" class="control-label"></label>
-                                    <input asp-for="Email" class="form-control" />
-                                    <span asp-validation-for="Email" class="text-danger"></span>
-                                </div>
-                                <div class="form-group">
-                                    <label asp-for="Role" class="control-label"></label>
-                                    <input asp-for="Role" class="form-control" />
-                                    <span asp-validation-for="Role" class="text-danger"></span>
-                                </div>
-                                <div class="form-group">
-                                    <a asp-action="Index" class="btn btn-secondary">@Localizer["Back"]</a>
-                                    <input type="submit" value="@Localizer["Save"]" class="btn btn-primary" />
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                    <div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-</div>
+</section>
 
 @section Scripts {
     @{
@@ -78,6 +66,6 @@
     <script src="~/lib/datatables-buttons/js/buttons.print.min.js"></script>
     <script src="~/lib/datatables-buttons/js/buttons.colVis.min.js"></script>
     <script src="~/lib/chart.js/Chart.min.js"></script>
-    <script src="~/lib/pqgridf/pqgrid.min.js"></script>
-    <script src="~/lib/pqgridf/localize/pq-localize-pt-br.min.js"></script>
+    <script src="~/lib/pqGrid/pqgrid.min.js"></script>
+    <script src="~/lib/pqGrid/localize/pq-localize-pt-br.js"></script>
 }

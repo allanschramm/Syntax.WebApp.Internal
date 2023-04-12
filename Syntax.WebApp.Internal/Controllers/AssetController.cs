@@ -3,8 +3,17 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Syntax.WebApp.Internal.Controllers
 {
-    public class AssetController : Controller
+    public class AssetController : BaseController
     {
+        HttpClient client;
+
+        public AssetController(IHttpClientFactory factory, ILogger<BaseController> baseLogger, IHttpContextAccessor httpContextAccessor)
+            : base(baseLogger, httpContextAccessor)
+        {
+            client = factory.CreateClient();
+
+        }
+
         // GET: AssetController
         public ActionResult Index()
         {

@@ -1,16 +1,19 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Syntax.WebApp.Internal.Models;
 using System.Diagnostics;
 
 namespace Syntax.WebApp.Internal.Controllers
 {
-    public class HomeController : Controller
-    {
-        private readonly ILogger<HomeController> _logger;
+    [AllowAnonymous]
 
-        public HomeController(ILogger<HomeController> logger)
+    public class HomeController : BaseController
+    {
+        public HomeController(ILogger<HomeController> logger, ILogger<BaseController> baseLogger, IHttpContextAccessor httpContextAccessor)
+        : base(baseLogger, httpContextAccessor)
         {
-            _logger = logger;
+            _logger= logger;
+            
         }
 
         public IActionResult Index()

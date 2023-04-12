@@ -1,4 +1,6 @@
-﻿@model IEnumerable<Syntax.Models.User>
+﻿@model IEnumerable<User>
+@using Microsoft.AspNetCore.Mvc.ViewComponents
+
 
 @{
     ViewData["Title"] = "User";
@@ -13,8 +15,8 @@
                 </div>
                 <div class="col-sm">
                     <div class="breadcrumb float-sm-right">
-                        <a class="btn fa fa-edit" asp-action="Create">Create New</a>
-                    </div>                    
+                        <a class="btn fa fa-edit" id="createUser">Create New</a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -30,6 +32,9 @@
                                 <th>
                                     @Html.DisplayNameFor(model => model.Name)
                                 </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Id)
+                                </th> 
                                 <th>
                                     @Html.DisplayNameFor(model => model.Email)
                                 </th>
@@ -53,8 +58,11 @@
                             {
                                 <tr>
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.Name)
+                                        @Html.DisplayFor(modelItem => item.Name /*$"{item.Name} {item.LastName}"*/)
                                     </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Id)
+                                    </td> 
                                     <td>
                                         @Html.DisplayFor(modelItem => item.Email)
                                     </td>
@@ -71,8 +79,8 @@
                                         @Html.DisplayFor(modelItem => item.IsEmailConfirmed)
                                     </td>
                                     <td>
-                                        <a asp-action="Edit" asp-route-id="@item.Id">@Localizer["Edit"]</a> |                                        
-                                        <a asp-action="Delete" asp-route-id="@item.Id">@Localizer["Delete"]</a>
+                                        <button class="btn btn-primary editUser"  data-value="@item.Id">@Localizer["Edit"]</button>
+                                        <button class="btn btn-danger deleteUser" data-value="@item.Id">@Localizer["Delete"]</button>
                                     </td>
                                 </tr>
                             }
@@ -82,6 +90,44 @@
             </div>
         </div>
     </section>
+</div>
+
+<div id="ModalDetail" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">@Localizer["Create"]</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="DataDetail"></div>
+            </div>
+            <div class="modal-footer">
+                <hr />  
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="ModalDetailEdit" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">@Localizer["Edit"]</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="DataDetailEdit"></div>
+            </div>
+            <div class="modal-footer">
+                <hr />  
+            </div>
+        </div>
+    </div>
 </div>
 
 @section Scripts {
@@ -101,6 +147,71 @@
     <script src="~/lib/datatables-buttons/js/buttons.print.min.js"></script>
     <script src="~/lib/datatables-buttons/js/buttons.colVis.min.js"></script>
     <script src="~/lib/chart.js/Chart.min.js"></script>
-    <script src="~/lib/pqgridf/pqgrid.min.js"></script>
-    <script src="~/lib/pqgridf/localize/pq-localize-pt-br.min.js"></script>
+    <script src="~/lib/pqGrid/pqgrid.min.js"></script>
+    <script src="~/lib/pqGrid/localize/pq-localize-pt-br.js"></script>
+
+    <script type="text/javascript">
+
+
+        $(document).ready(function () {
+
+            $("#createUser").click(function () {
+                $.ajax({
+                    type: "Get",
+                    url: '@Url.Action("Create", "User")',
+                    data: { id: $(this).data("value") },
+                    success: function (data) {
+                        $("#DataDetail").html(data);
+                        $("#ModalDetail").modal("show");
+                    }
+                });
+            });
+
+            $(".deleteUser").click(function () {
+                $.ajax({
+                    type: "Get",
+                    url: '@Url.Action("Delete", "User")',
+                    data: { id: $(this).data("value") },
+                    success: function (data) {
+                        $("#DataDetail").html(data);
+                        $("#ModalDetail").modal("show");
+                    }
+                });
+            });  
+            
+            $(".editUser").click(function () {
+                $.ajax({
+                    type: "Get",
+                    url: '@Url.Action("Edit", "User")',
+                    data: { id: $(this).data("value") },
+                    success: function (data) {
+                        $("#DataDetailEdit").html(data);
+                        $("#ModalDetailEdit").modal("show");
+                    }
+                });
+            });
+
+            // Recupera as mensagens de erro do TempData
+            var errorMessages = @Html.Raw(Json.Serialize(TempData["ErrorMessages"] ?? new string[0]));
+
+            // Exibe os erros em forma de toast
+            for (var i = 0; i < errorMessages.length; i++) {
+                var parts = errorMessages[i].split(": ");
+                var title = "";
+                var message = errorMessages[i];
+                if (parts.length > 1) {
+                    title = parts[0];
+                    message = parts[1];
+                }
+              
+                toastr.error(message, title);
+            }
+
+        });
+
+
+
+
+    </script>
+
 }

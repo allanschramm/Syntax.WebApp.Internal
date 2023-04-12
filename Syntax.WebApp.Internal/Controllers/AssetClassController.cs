@@ -1,33 +1,40 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Syntax.Models;
+using Syntax.WebApp.Internal.Models;
+using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
+using System.Text.Json;
 
 namespace Syntax.WebApp.Internal.Controllers
 {
-    public class AssetClassController : Controller
+    public class AssetClassController : BaseController
     {
         HttpClient client;
+        
 
-        public AssetClassController(IHttpClientFactory factory)
+        public AssetClassController(IHttpClientFactory factory, ILogger<BaseController> baseLogger, IHttpContextAccessor httpContextAccessor)
+            : base(baseLogger, httpContextAccessor)
         {
             client = factory.CreateClient();
+
         }
 
         // GET: AssetClassController
         public async Task<ActionResult> Index()
         {
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
             client.BaseAddress = new Uri("http://localhost:5069");
-            client.DefaultRequestHeaders.Accept.Add(new
-                MediaTypeWithQualityHeaderValue("application/json"));
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
             try
             {
-                HttpResponseMessage response = client.GetAsync("api/assetclass").Result;
+                HttpResponseMessage response = await client.GetAsync("api/assetclass");
                 if (response.IsSuccessStatusCode)
                 {
                     var listAC = await response.Content.ReadAsAsync<AssetClass[]>();
-                    return View(listAC.ToList());
+
+                    return View(listAC);
                 }
                 else
                 {
@@ -40,6 +47,7 @@ namespace Syntax.WebApp.Internal.Controllers
             }
         }
 
+
         // GET: AssetClassController/Details/5
         public ActionResult Details(int id)
         {
@@ -47,7 +55,7 @@ namespace Syntax.WebApp.Internal.Controllers
         }
 
         // GET: AssetClassController/Create
-        public ActionResult Create()
+        public async Task<ActionResult> CreateAsync()
         {
             return View();
         }
@@ -55,15 +63,29 @@ namespace Syntax.WebApp.Internal.Controllers
         // POST: AssetClassController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<ActionResult> CreateAsync(AssetClass assetClass)
         {
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+            client.BaseAddress = new Uri("http://localhost:5069");
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
             try
             {
-                return RedirectToAction(nameof(Index));
+                var json = JsonSerializer.Serialize(assetClass);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                HttpResponseMessage response = await client.PostAsync("api/assetclass", content);
+                if (response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    throw new Exception("Ocorreu um erro na listagem!");
+                }
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                return View("_Erro", ex);
             }
         }
 

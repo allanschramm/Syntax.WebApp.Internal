@@ -1,17 +1,19 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Syntax.Models;
+using Syntax.WebApp.Internal.Models;
 using System.Net.Http.Headers;
 
 namespace Syntax.WebApp.Internal.Controllers
 {
-    public class TransactionClassController : Controller
+    public class TransactionClassController : BaseController
     {
         HttpClient client;
 
-        public TransactionClassController(IHttpClientFactory factory)
+        public TransactionClassController(IHttpClientFactory factory, ILogger<BaseController> baseLogger, IHttpContextAccessor httpContextAccessor)
+            : base(baseLogger, httpContextAccessor)
         {
             client = factory.CreateClient();
+
         }
 
         // GET: TransactionClassController
