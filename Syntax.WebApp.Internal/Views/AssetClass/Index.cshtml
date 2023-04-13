@@ -14,7 +14,7 @@
                 </div>
                 <div class="col-sm">
                     <div class="breadcrumb float-sm-right">
-                        <a class="btn fa fa-edit" asp-action="Create">Create New</a>
+                        <a class="btn fa fa-edit" id="createAsset">Create New</a>
                     </div>
                 </div>
             </div>
@@ -45,6 +45,9 @@
                                 <th>
                                     @Html.DisplayNameFor(model => model.Description)
                                 </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Icon)
+                                </th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -60,10 +63,13 @@
                                     </td>
                                     <td>
                                         @Html.DisplayFor(modelItem => item.Description)
+                                    </td> 
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Icon)
                                     </td>
                                     <td>
-                                        <a asp-action="Edit" asp-route-id="@item.Id">@Localizer["Edit"]</a> |
-                                        <a asp-action="Delete" asp-route-id="@item.Id">@Localizer["Delete"]</a>
+                                        <button class="btn btn-secondary editAsset" data-value="@item.Id">@Localizer["Edit"]</button>
+                                        <button class="btn btn-danger deleteAsset" data-value="@item.Id">@Localizer["Delete"]</button>
                                     </td>
                                 </tr>
                             }
@@ -74,6 +80,64 @@
         </div>
     </section>
 </div>
+
+<div id="ModalDetail" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">@Localizer["Create"]</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="DataDetail"></div>
+            </div>
+            <div class="modal-footer">
+                <hr />
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="ModalDetailEdit" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">@Localizer["Edit"]</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="DataDetailEdit"></div>
+            </div>
+            <div class="modal-footer">
+                <hr />
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="ModalDetailDelete" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">@Localizer["Delete"]</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="DataDetailDelete"></div>
+            </div>
+            <div class="modal-footer">
+                <hr />
+            </div>
+        </div>
+    </div>
+</div>
+
 
 @section Css {
     <style>
@@ -105,13 +169,83 @@
 
 
     <script>
+
         $(document).ready(function () {
+
+            $("#createAsset").click(function () {
+                $.ajax({
+                    type: "Get",
+                    url: '@Url.Action("Create", "AssetClass")',
+                    data: { id: $(this).data("value") },
+                    success: function (data) {
+                        $("#DataDetail").html(data);
+                        $("#ModalDetail").modal("show");
+                    }
+                });
+            });
+
+            $(".deleteAsset").click(function () {
+                $.ajax({
+                    type: "Get",
+                    url: '@Url.Action("Delete", "AssetClass")',
+                    data: { id: $(this).data("value") },
+                    success: function (data) {
+                        $("#DataDetailDelete").html(data);
+                        $("#ModalDetailDelete").modal("show");
+                    }
+                });
+            });
+
+            $(".editAsset").click(function () {
+                $.ajax({
+                    type: "Get",
+                    url: '@Url.Action("Edit", "AssetClass")',
+                    data: { id: $(this).data("value") },
+                    success: function (data) {
+                        $("#DataDetailEdit").html(data);
+                        $("#ModalDetailEdit").modal("show");
+                    }
+                });
+            });
+
             $("#searchInput").on("keyup", function () {
                 var value = $(this).val().toLowerCase();
                 $("#myTable tr").filter(function () {
                     $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
                 });
             });
+            // Recupera as mensagens de erro do TempData
+            var errorMessages = @Html.Raw(Json.Serialize(TempData["ErrorMessages"] ?? new string[0]));
+
+            // Exibe os erros em forma de toast
+            for (var i = 0; i < errorMessages.length; i++) {
+                var parts = errorMessages[i].split(": ");
+                var title = "";
+                var message = errorMessages[i];
+                if (parts.length > 1) {
+                    title = parts[0];
+                    message = parts[1];
+                }
+
+                toastr.error(message, title);
+            }
+
+            // Recupera as mensagens de sucesso do TempData
+            var successMessages = @Html.Raw(Json.Serialize(TempData["SuccessMessages"] ?? new string[0]));
+
+            // Exibe as mensagens de sucesso em forma de toast
+            for (var i = 0; i < successMessages.length; i++) {
+                var parts = successMessages[i].split(": ");
+                var title = "";
+                var message = successMessages[i];
+                if (parts.length > 1) {
+                    title = parts[0];
+                    message = parts[1];
+                }
+
+                toastr.success(message, title);
+            }
+
         });
-    </script>
+        </script>
 }

@@ -24,6 +24,7 @@ namespace Syntax.WebApp.Internal.Controllers
         // GET: UserController
         public async Task<ActionResult> Index()
         {
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
             client.BaseAddress = new Uri("http://localhost:5069");
             client.DefaultRequestHeaders.Accept.Add(new
                 MediaTypeWithQualityHeaderValue("application/json"));
@@ -70,6 +71,7 @@ namespace Syntax.WebApp.Internal.Controllers
 
             try
             {
+                
                 var json = System.Text.Json.JsonSerializer.Serialize(user);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -77,6 +79,8 @@ namespace Syntax.WebApp.Internal.Controllers
 
                 if (response.IsSuccessStatusCode)
                 {
+                    TempData["SuccessMessages"] = new[] { "Sucesso: Criado com Sucesso." };
+
                     // Sucesso
                     return RedirectToAction(nameof(Index));
                 }
@@ -85,15 +89,7 @@ namespace Syntax.WebApp.Internal.Controllers
                     var jsonErr = await response.Content.ReadAsStringAsync();
                     var apiError = System.Text.Json.JsonSerializer.Deserialize<ApiError>(jsonErr, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
 
-                    var errorMessages = new List<string>();
-                    foreach (var error in apiError.Errors)
-                    {
-                        foreach (var message in error.Value)
-                        {
-                            var errorMessageWithTitle = $"{error.Key}: {message}";
-                            errorMessages.Add(errorMessageWithTitle);
-                        }
-                    }
+                    var errorMessages = apiError.ErrorMessages;
 
                     TempData["ErrorMessages"] = errorMessages.ToArray();
                 }
@@ -152,6 +148,8 @@ namespace Syntax.WebApp.Internal.Controllers
                 if (response.IsSuccessStatusCode)
                 {
                     // Sucesso
+                    TempData["SuccessMessages"] = new[] { "Sucesso: Dados atualizados com sucesso." };
+
                     return RedirectToAction(nameof(Index));
                 }
                 if (response.StatusCode == HttpStatusCode.BadRequest)
@@ -159,15 +157,8 @@ namespace Syntax.WebApp.Internal.Controllers
                     var jsonErr = await response.Content.ReadAsStringAsync();
                     var apiError = System.Text.Json.JsonSerializer.Deserialize<ApiError>(jsonErr, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
 
-                    var errorMessages = new List<string>();
-                    foreach (var error in apiError.Errors)
-                    {
-                        foreach (var message in error.Value)
-                        {
-                            var errorMessageWithTitle = $"{error.Key}: {message}";
-                            errorMessages.Add(errorMessageWithTitle);
-                        }
-                    }
+                    var errorMessages = apiError.ErrorMessages;
+
 
                     TempData["ErrorMessages"] = errorMessages.ToArray();
                 }
@@ -221,6 +212,8 @@ namespace Syntax.WebApp.Internal.Controllers
                 if (response.IsSuccessStatusCode)
                 {
                     // Sucesso
+                    TempData["SuccessMessages"] = new[] { "Sucesso: Dados atualizados com sucesso." };
+
                     return RedirectToAction(nameof(Index));
                 }
                 if (response.StatusCode == HttpStatusCode.BadRequest)
@@ -228,15 +221,8 @@ namespace Syntax.WebApp.Internal.Controllers
                     var jsonErr = await response.Content.ReadAsStringAsync();
                     var apiError = System.Text.Json.JsonSerializer.Deserialize<ApiError>(jsonErr, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
 
-                    var errorMessages = new List<string>();
-                    foreach (var error in apiError.Errors)
-                    {
-                        foreach (var message in error.Value)
-                        {
-                            var errorMessageWithTitle = $"{error.Key}: {message}";
-                            errorMessages.Add(errorMessageWithTitle);
-                        }
-                    }
+                    var errorMessages = apiError.ErrorMessages;
+
 
                     TempData["ErrorMessages"] = errorMessages.ToArray();
                 }

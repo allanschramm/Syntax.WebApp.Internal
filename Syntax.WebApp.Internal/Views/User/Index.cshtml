@@ -23,6 +23,14 @@
     </div>
     <section class="content">
         <div class="container-fluid">
+            <div class="input-group input-group-lg d-flex justify-content-center">
+                <input type="search" class="form-control form-control-sm mx-auto" id="searchInput" placeholder="Pesquisar">
+                <div class="input-group-append">
+                    <button type="button" class="btn btn-sm btn-default">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
+            </div>
             <div class="row">
                 <div class="col-sm">
                     <table class="table table-bordered table-striped text-sm">
@@ -30,7 +38,7 @@
                             <tr>
 
                                 <th>
-                                    @Html.DisplayNameFor(model => model.Name)
+                                    @Html.DisplayNameFor(model => model.FullName)
                                 </th>
                                 <th>
                                     @Html.DisplayNameFor(model => model.Id)
@@ -58,7 +66,7 @@
                             {
                                 <tr>
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.Name /*$"{item.Name} {item.LastName}"*/)
+                                        @Html.DisplayFor(modelItem => item.FullName)
                                     </td>
                                     <td>
                                         @Html.DisplayFor(modelItem => item.Id)
@@ -79,7 +87,7 @@
                                         @Html.DisplayFor(modelItem => item.IsEmailConfirmed)
                                     </td>
                                     <td>
-                                        <button class="btn btn-primary editUser"  data-value="@item.Id">@Localizer["Edit"]</button>
+                                        <button class="btn btn-secondary editUser"  data-value="@item.Id">@Localizer["Edit"]</button>
                                         <button class="btn btn-danger deleteUser" data-value="@item.Id">@Localizer["Delete"]</button>
                                     </td>
                                 </tr>
@@ -130,6 +138,33 @@
     </div>
 </div>
 
+<div id="ModalDetailDelete" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">@Localizer["Delete"]</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="DataDetailDelete"></div>
+            </div>
+            <div class="modal-footer">
+                <hr />  
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Css {
+    <style>
+        .searchInput {
+            width: 50%;
+        }
+    </style>
+}
+
 @section Scripts {
     <script src="~/lib/daterangepicker/daterangepicker.js"></script>
 
@@ -173,8 +208,8 @@
                     url: '@Url.Action("Delete", "User")',
                     data: { id: $(this).data("value") },
                     success: function (data) {
-                        $("#DataDetail").html(data);
-                        $("#ModalDetail").modal("show");
+                        $("#DataDetailDelete").html(data);
+                        $("#ModalDetailDelete").modal("show");
                     }
                 });
             });  
@@ -191,6 +226,12 @@
                 });
             });
 
+             $("#searchInput").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                $("#myTable tr").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
             // Recupera as mensagens de erro do TempData
             var errorMessages = @Html.Raw(Json.Serialize(TempData["ErrorMessages"] ?? new string[0]));
 
@@ -205,6 +246,22 @@
                 }
               
                 toastr.error(message, title);
+            }
+
+            // Recupera as mensagens de sucesso do TempData
+            var successMessages = @Html.Raw(Json.Serialize(TempData["SuccessMessages"] ?? new string[0]));
+
+            // Exibe as mensagens de sucesso em forma de toast
+            for (var i = 0; i < successMessages.length; i++) {
+                var parts = successMessages[i].split(": ");
+                var title = "";
+                var message = successMessages[i];
+                if (parts.length > 1) {
+                    title = parts[0];
+                    message = parts[1];
+                }
+
+                toastr.success(message, title);
             }
 
         });
