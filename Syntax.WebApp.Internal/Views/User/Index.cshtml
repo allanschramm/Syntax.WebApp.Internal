@@ -31,72 +31,78 @@
                     </button>
                 </div>
             </div>
+            <br />
             <div class="row">
-                <div class="col-sm">
-                    <table class="table table-bordered table-striped text-sm">
-                        <thead>
-                            <tr>
-
-                                <th>
-                                    @Html.DisplayNameFor(model => model.FullName)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.Id)
-                                </th> 
-                                <th>
-                                    @Html.DisplayNameFor(model => model.Email)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.Role)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.CreationDate)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.LastAccessDate)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.IsEmailConfirmed)
-                                </th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var item in Model)
-                            {
+                <div class="card">
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <div id="buttons"></div>
+                        <table id="myTable" class="table table-bordered table-striped">
+                            <thead>
                                 <tr>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.FullName)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Id)
-                                    </td> 
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Email)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Role)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.CreationDate)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.LastAccessDate)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.IsEmailConfirmed)
-                                    </td>
-                                    <td>
-                                        <button class="btn btn-secondary editUser"  data-value="@item.Id">@Localizer["Edit"]</button>
-                                        <button class="btn btn-danger deleteUser" data-value="@item.Id">@Localizer["Delete"]</button>
-                                    </td>
+
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.FullName)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Id)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Email)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Role)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.CreationDate)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.LastAccessDate)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.IsEmailConfirmed)
+                                    </th>
+                                    <th class="buttons-column" data-priority="1">@Localizer["Actions"]</th>
                                 </tr>
-                            }
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.FullName)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Id)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Email)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Role)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.CreationDate)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.LastAccessDate)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.IsEmailConfirmed)
+                                        </td>
+                                        <td class="buttons-column" data-priority="1">
+                                            <div>
+                                                <button class="btn btn-secondary editUser btn-block" data-value="@item.Id">@Localizer["Edit"]</button>
+                                                <button class="btn btn-danger deleteUser btn-block" data-value="@item.Id">@Localizer["Delete"]</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-        </div>
     </section>
 </div>
 
@@ -113,7 +119,7 @@
                 <div id="DataDetail"></div>
             </div>
             <div class="modal-footer">
-                <hr />  
+                <hr />
             </div>
         </div>
     </div>
@@ -132,7 +138,7 @@
                 <div id="DataDetailEdit"></div>
             </div>
             <div class="modal-footer">
-                <hr />  
+                <hr />
             </div>
         </div>
     </div>
@@ -151,7 +157,7 @@
                 <div id="DataDetailDelete"></div>
             </div>
             <div class="modal-footer">
-                <hr />  
+                <hr />
             </div>
         </div>
     </div>
@@ -162,6 +168,12 @@
         .searchInput {
             width: 50%;
         }
+
+        .cardContent {
+            width: 100%
+        }
+
+      
     </style>
 }
 
@@ -212,8 +224,8 @@
                         $("#ModalDetailDelete").modal("show");
                     }
                 });
-            });  
-            
+            });
+
             $(".editUser").click(function () {
                 $.ajax({
                     type: "Get",
@@ -226,7 +238,50 @@
                 });
             });
 
-             $("#searchInput").on("keyup", function () {
+            $('#myTable').DataTable({
+                "responsive": true,
+                "lengthChange": false,
+                "autoWidth": false,
+                "columnDefs": [
+                    { width: '300px', targets: 0 },
+                    { width: '300px', targets: 1 },
+                    { width: '300px', targets: 2 },
+                    { width: '100px', targets: 3 },
+                    { width: '250px', targets: 4 },
+                    { width: '100px', targets: 5 },
+                    { width: '100px', targets: 7 },
+                    { width: '100px', targets: 7 }
+                ],
+                "searching": false,
+                "buttons": [
+                    {
+                        extend: 'csv',
+                        exportOptions: {
+                            columns: ':not(.buttons-column)'
+                        }
+                    },
+                    {
+                        extend: 'excel',
+                        exportOptions: {
+                            columns: ':not(.buttons-column)'
+                        }
+                    },
+                    {
+                        extend: 'pdf',
+                        exportOptions: {
+                            columns: ':not(.buttons-column)'
+                        }
+                    },
+                    {
+                        extend: 'print',
+                        exportOptions: {
+                            columns: ':not(.buttons-column)'
+                        }
+                    }
+                ]
+            }).buttons().container().appendTo('#myTable_wrapper .col-md-6:eq(0)');
+
+            $("#searchInput").on("keyup", function () {
                 var value = $(this).val().toLowerCase();
                 $("#myTable tr").filter(function () {
                     $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
@@ -244,7 +299,7 @@
                     title = parts[0];
                     message = parts[1];
                 }
-              
+
                 toastr.error(message, title);
             }
 

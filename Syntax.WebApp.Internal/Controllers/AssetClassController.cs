@@ -108,9 +108,23 @@ namespace Syntax.WebApp.Internal.Controllers
         }
 
         // GET: AssetClassController/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<ActionResult> Edit(int id)
         {
-            return PartialView();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+            client.BaseAddress = new Uri("http://localhost:5069");
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            var response = await client.GetAsync($"api/assetclass/{id}");
+            if (response.IsSuccessStatusCode)
+            {
+                var assetClass = await response.Content.ReadAsAsync<AssetClass>();
+
+                return PartialView(assetClass);
+            }
+            else
+            {
+                TempData["ErrorMessages"] = "Erro: ao localizar a Classe de Asset !";
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         // POST: AssetClassController/Edit/5

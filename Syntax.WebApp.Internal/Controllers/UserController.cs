@@ -124,7 +124,7 @@ namespace Syntax.WebApp.Internal.Controllers
             }
             else
             {
-                TempData["ErrorMessages"] = "Erro ao localizar o User !";
+                TempData["ErrorMessages"] = "Erro: ao localizar o User !";
                 return RedirectToAction(nameof(Index));
             }
         }

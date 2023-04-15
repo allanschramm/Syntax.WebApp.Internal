@@ -15,19 +15,24 @@
                             <input type="hidden" asp-for="Id" />
                             <div class="form-group">
                                 <label asp-for="Name" class="control-label"></label>
-                                <input asp-for="Name" class="form-control" required/>
+                                <input asp-for="Name" class="form-control" required />
                                 <span asp-validation-for="Name" class="text-danger"></span>
                             </div>
                             <div class="form-group">
                                 <label asp-for="Description" class="control-label"></label>
-                                <input asp-for="Description" class="form-control" required/>
+                                <input asp-for="Description" class="form-control" required />
                                 <span asp-validation-for="Description" class="text-danger"></span>
                             </div>
                             <div class="form-group">
-                                <label asp-for="Icon" class="control-label"></label>
-                                <input asp-for="Icon" class="form-control" required/>
-                                <span asp-validation-for="Icon" class="text-danger"></span>
+                                <label for="finance-emoji-select">Selecione um emoji financeiro:</label>
+                                <select asp-for="Icon" class="form-control" id="finance-emoji-select">
+                                    <option value="💰"><i class="fas fa-money-bill"></i> 💰 Dinheiro</option>
+                                    <option value="💳"><i class="fas fa-credit-card"></i> 💳 Cartão de crédito</option>
+                                    <option value="🏦"><i class="fas fa-university"></i> 🏦 Banco</option>
+                                    <option value="💸"><i class="fas fa-money-check-alt"></i> 💸 Cheque</option>
+                                </select>
                             </div>
+
                             <div class="form-group">
                                 <a asp-action="Index" class="btn btn-secondary">@Localizer["Back"]</a>
                                 <input type="submit" value="@Localizer["Save"]" class="btn btn-primary" />
