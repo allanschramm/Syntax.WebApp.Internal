@@ -44,7 +44,7 @@ namespace Syntax.WebApp.Internal.Controllers
                 {
                     
                     var tokenString = await response.Content.ReadAsStringAsync();
-                    TokenClass token = JsonConvert.DeserializeObject<TokenClass>(tokenString);
+                    TokenClass token = JsonConvert.DeserializeObject<TokenClass>(tokenString)!;
                     DateTime? expirationDate = token.ExpirationDate;
 
 

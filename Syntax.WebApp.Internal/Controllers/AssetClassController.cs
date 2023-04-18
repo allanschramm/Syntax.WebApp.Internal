@@ -87,7 +87,7 @@ namespace Syntax.WebApp.Internal.Controllers
                 if (response.StatusCode == HttpStatusCode.BadRequest)
                 {
                     var jsonErr = await response.Content.ReadAsStringAsync();
-                    var apiError = JsonSerializer.Deserialize<ApiError>(jsonErr, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
+                    var apiError = JsonSerializer.Deserialize<ApiError>(jsonErr, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase })!;
 
                     var errorMessages = apiError.ErrorMessages;
 
@@ -156,7 +156,7 @@ namespace Syntax.WebApp.Internal.Controllers
                         var jsonErr = await response.Content.ReadAsStringAsync();
                         var apiError = System.Text.Json.JsonSerializer.Deserialize<ApiError>(jsonErr, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
 
-                        var errorMessages = apiError.ErrorMessages;
+                        var errorMessages = apiError!.ErrorMessages;
 
 
                         TempData["ErrorMessages"] = errorMessages.ToArray();
@@ -220,7 +220,7 @@ namespace Syntax.WebApp.Internal.Controllers
                     var jsonErr = await response.Content.ReadAsStringAsync();
                     var apiError = JsonSerializer.Deserialize<ApiError>(jsonErr, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
 
-                    var errorMessages = apiError.ErrorMessages;
+                    var errorMessages = apiError!.ErrorMessages!;
 
                     TempData["ErrorMessages"] = errorMessages.ToArray();
                 }

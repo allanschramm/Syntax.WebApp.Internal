@@ -9,6 +9,7 @@
                 <img src="~/img/UserIcon.png" class="img-circle elevation-2" alt="User Image">
             </div>
             <div class="info">
+                <a href="#" class="d-block">@ViewBag.DisplayName</a>
                 <a href="#" class="d-block">@ViewBag.UserName</a>
             </div>
         </div>
@@ -27,8 +28,8 @@
                 <li class="nav-item" policies="Home">
                     <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index"><i class="nav-icon fas fa-tachometer-alt"></i><p>@Localizer["Home"]</p></a>
                 </li>
-                <li class="nav-item" policies="Transaction Category">
-                    <a class="nav-link" asp-area="" asp-controller="TransactionClass" asp-action="Index"><i class="nav-icon fa fa-layer-group"></i><p>@Localizer["Transaction Category"]</p></a>
+                <li class="nav-item" policies="Transaction Class">
+                    <a class="nav-link" asp-area="" asp-controller="TransactionClass" asp-action="Index"><i class="nav-icon fa fa-layer-group"></i><p>@Localizer["Transaction Class"]</p></a>
                 </li>
                 <li class="nav-item" policies="Asset Class">
                     <a class="nav-link" asp-area="" asp-controller="AssetClass" asp-action="Index"><i class="nav-icon fas fa-building"></i><p>@Localizer["Asset Class"]</p></a>

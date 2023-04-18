@@ -39,6 +39,7 @@ namespace Syntax.WebApp.Internal.Controllers
                     ViewBag.UserId = claims.FirstOrDefault(c => c.Type == "sub")?.Value;
                     ViewBag.UserName = claims.FirstOrDefault(c => c.Type == "name")?.Value;
                     ViewBag.UserEmail = claims.FirstOrDefault(c => c.Type == "email")?.Value;
+                    ViewBag.DisplayName = claims.FirstOrDefault(c => c.Type == "displayName")?.Value;
                 }
                 catch (Exception ex)
                 {
