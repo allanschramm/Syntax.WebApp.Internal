@@ -22,7 +22,7 @@
                             <label asp-for="Name" class="control-label"></label>
                             <input asp-for="Name" class="form-control" />
                             <span asp-validation-for="Name" class="text-danger"></span>
-                        </div>  
+                        </div>
                         <div class="form-group">
                             <label asp-for="LastName" class="control-label"></label>
                             <input asp-for="LastName" class="form-control" />
@@ -35,7 +35,12 @@
                         </div>
                         <div class="form-group">
                             <label asp-for="Role" class="control-label"></label>
-                            <input asp-for="Role" class="form-control" />
+                            <select asp-for="Role" class="form-control" required>
+                                <option value="">Select a role</option>
+                                <option value="Administrator">Administrator</option>
+                                <option value="User">User</option>
+                                <option value="Premium">Premium</option>
+                            </select>
                             <span asp-validation-for="Role" class="text-danger"></span>
                         </div>
                         <div class="form-group">
@@ -55,22 +60,5 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 
-    <script src="~/lib/daterangepicker/daterangepicker.js"></script>
 
-    <!-- DataTables  & Plugins -->
-    <script src="~/lib/datatables/jquery.dataTables.min.js"></script>
-    <script src="~/lib/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
-    <script src="~/lib/datatables-responsive/js/dataTables.responsive.min.js"></script>
-    <script src="~/lib/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
-    <script src="~/lib/datatables-buttons/js/dataTables.buttons.min.js"></script>
-    <script src="~/lib/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
-    <script src="~/lib/jszip/jszip.min.js"></script>
-    <script src="~/lib/pdfmake/pdfmake.min.js"></script>
-    <script src="~/lib/pdfmake/vfs_fonts.js"></script>
-    <script src="~/lib/datatables-buttons/js/buttons.html5.min.js"></script>
-    <script src="~/lib/datatables-buttons/js/buttons.print.min.js"></script>
-    <script src="~/lib/datatables-buttons/js/buttons.colVis.min.js"></script>
-    <script src="~/lib/chart.js/Chart.min.js"></script>
-    <script src="~/lib/pqGrid/pqgrid.min.js"></script>
-    <script src="~/lib/pqGrid/localize/pq-localize-pt-br.js"></script>
 }

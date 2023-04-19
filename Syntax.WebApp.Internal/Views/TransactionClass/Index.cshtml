@@ -65,9 +65,9 @@
                                         <td>
                                             @Html.DisplayFor(modelItem => item.Description)
                                         </td>
-                                        <td>
-                                            <object data="@Url.Content(item.Icon)" type="image/svg+xml" width="50" height="50">
-                                                <img src="@Url.Content(item.Icon)" alt="@item.Name">
+                                        <td class="text-center">
+                                            <object data="@Url.Content(item.Icon)"  width="50" height="50">
+                                                <img src="@Url.Content(item.Icon)" alt="@item.Name" style="padding-bottom: 10px;">
                                             </object>
                                         </td>
 
@@ -152,7 +152,6 @@
     <style>
 
 
-
     </style>
 }
 
@@ -161,6 +160,26 @@
     <script>
 
         $(document).ready(function () {
+
+            var icons = document.getElementsByClassName("icon-select");
+            for (var i = 0; i < icons.length; i++) {
+                var icon = icons[i];
+                icon.addEventListener("click", function () {
+                    var iconPath = this.getAttribute("data-icon-path");
+                    // faça algo com o caminho do ícone selecionado
+                });
+            }
+
+            // Adiciona evento de clique nas imagens selecionáveis
+            $('.selectable-icon').click(function () {
+                // Obtém o valor do atributo "src" da imagem clicada
+                var selectedIconSrc = $(this).attr('src');
+
+                // Atribui o valor aos campos correspondentes
+                $('#Icon').val(selectedIconSrc);
+                $('#IconFile').val('');
+            });
+
 
             $("#createTC").click(function () {
                 $.ajax({

@@ -1,10 +1,11 @@
 ﻿@model Syntax.WebApp.Internal.Models.TransactionClass
+@using System.IO
 
 <h4>TransactionClass</h4>
 <hr />
 <div class="row">
     <div class="col-md">
-        <form asp-action="Create">
+        <form asp-action="Create" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
@@ -18,9 +19,23 @@
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Icon" class="control-label"></label>
-                <input asp-for="Icon" class="form-control" />
-                <span asp-validation-for="Icon" class="text-danger"></span>
+                <label asp-for="IconFile" class="control-label"></label>
+                <input asp-for="IconFile" type="file" class="form-control" />
+                <span asp-validation-for="IconFile" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    @foreach (var file in ViewBag.FileList)
+                    {
+                        var imagePath = Url.Content($"~/Assets/{file.FileName}");
+                        <div class="col-md-3">
+                            <label>
+                                <input type="radio" name="Icon" value="@imagePath" />
+                                <img src="@imagePath" width="50" height="50" />
+                            </label>
+                        </div>
+                    }
+                </div>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
