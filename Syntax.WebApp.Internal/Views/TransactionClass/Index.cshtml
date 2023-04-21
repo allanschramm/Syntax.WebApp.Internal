@@ -66,12 +66,12 @@
                                             @Html.DisplayFor(modelItem => item.Description)
                                         </td>
                                         <td class="text-center">
-                                            <object data="@Url.Content(item.Icon)"  width="50" height="50">
+                                            <object data="@Url.Content(item.Icon)">
                                                 <img src="@Url.Content(item.Icon)" alt="@item.Name" style="padding-bottom: 10px;">
                                             </object>
                                         </td>
 
-                                        <td class="buttons-column" data-priority="1">
+                                        <td class="buttons-column buttons-cell" data-priority="1">
                                             <div>
                                                 <button class="btn btn-secondary editTC btn-block" data-value="@item.Id">@Localizer["Edit"]</button>
                                                 <button class="btn btn-danger deleteTC btn-block" data-value="@item.Id">@Localizer["Delete"]</button>
@@ -150,8 +150,11 @@
 
 @section Css {
     <style>
-
-
+        .buttons-cell .btn {
+            height: 12px; /* altura dos botões */
+            line-height: 5px; /* espaçamento vertical entre o texto e o botão */
+            padding: 12px 8px; /* espaçamento interno do botão */
+        }
     </style>
 }
 

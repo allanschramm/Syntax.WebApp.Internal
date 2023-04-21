@@ -9,18 +9,41 @@
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" required/>
+                <input asp-for="Name" class="form-control" required />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" required/>
+                <input asp-for="Description" class="form-control" required />
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
+            <div class="custom-file">
+                <input asp-for="IconFile" type="file" class="custom-file-input" accept=".png">
+                <label class="custom-file-label" for="IconFile">Escolher arquivo</label>
+            </div>
+            <hr />
             <div class="form-group">
-                <label asp-for="Icon" class="control-label"></label>
-                <input asp-for="Icon" class="form-control" required/>
-                <span asp-validation-for="Icon" class="text-danger"></span>
+                <div class="row icon-list">
+                    @if (ViewBag.FileList != null)
+                    {
+                        <div class="form-group">
+                            <div class="row">
+                                @foreach (var file in ViewBag.FileList)
+                                {
+                                    <div class="col-md-3">
+                                        <label>
+                                            <input type="radio" name="Icon" value="@file.ImageUrl"
+                                            @(file.ImageUrl == Model.Icon ? "checked" : "") />
+                                            <img src="@file.ImageUrl" />
+                                        </label>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+
+                    }
+
+                </div>
             </div>
             <div class="form-group">
                 <a asp-action="Index" class="btn btn-secondary">@Localizer["Back"]</a>
@@ -29,6 +52,41 @@
         </form>
     </div>
 </div>
+@section Css{
+    <style>
+        .icon-list .col-md-3 {
+            max-width: 25%;
+        }
+
+        .custom-file-input {
+            color: transparent;
+            border: none;
+            padding: 0;
+            background-color: #007bff;
+            color: #fff;
+            border-radius: .25rem;
+            cursor: pointer;
+        }
+
+        .custom-file-label {
+            position: relative;
+            top: 0;
+            left: 0;
+            z-index: 1;
+            font-size: 1rem;
+            line-height: 1.5;
+            color: #495057;
+            background-color: #e9ecef;
+            border-radius: .25rem;
+            padding: .375rem .75rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            cursor: pointer;
+        }
+
+    </style>
+    }
 
 @section Scripts {
     @{

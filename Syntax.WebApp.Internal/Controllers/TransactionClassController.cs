@@ -7,7 +7,7 @@ using System.Text.Json;
 using System.Text;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Web;
-
+using Syntax.WebApp.Internal.ViewModels;
 
 namespace Syntax.WebApp.Internal.Controllers
 {
@@ -59,14 +59,14 @@ namespace Syntax.WebApp.Internal.Controllers
         public ActionResult Create()
         {
             var fileNames = Directory.GetFiles(_env.WebRootPath, "Assets/*.*").Select(Path.GetFileName);
-            var fileList = fileNames.Select(fn => new
+
+            var fileList = fileNames.Select(fn => new FileViewModel
             {
                 ImageUrl = Url.Content($"~/Assets/{fn}"),
                 FileName = fn
-            });
+            }).ToList();
 
             ViewBag.FileList = fileList;
-
 
             return PartialView();
         }
@@ -137,45 +137,148 @@ namespace Syntax.WebApp.Internal.Controllers
             return RedirectToAction(nameof(Index));
         }
         // GET: TransactionClassController/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<ActionResult> Edit(int id)
         {
-            return View();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+            client.BaseAddress = new Uri("http://localhost:5069");
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            var response = await client.GetAsync($"api/transactionclass/{id}");
+            if (response.IsSuccessStatusCode)
+            {
+                var transactionClass = await response.Content.ReadAsAsync<TransactionClass>();
+
+                var currentFileName = transactionClass.Icon;
+
+                var fileNames = Directory.GetFiles(_env.WebRootPath, "Assets/*.*").Select(Path.GetFileName);
+                var fileList = fileNames.Select(fn => new FileViewModel
+                {
+                    ImageUrl = Url.Content($"~/Assets/{fn}"),
+                    FileName = fn,
+                    IsSelected = (fn == currentFileName)
+                }).ToList();
+
+                ViewBag.FileList = fileList;
+
+                return PartialView(transactionClass);
+            }
+            else
+            {
+                TempData["ErrorMessages"] = "Erro: ao localizar a Classe de Asset !";
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         // POST: TransactionClassController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<ActionResult> EditAsync(TransactionClass transactionClass)
         {
-            try
             {
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+                client.BaseAddress = new Uri("http://localhost:5069");
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                try
+                {
+                    var json = System.Text.Json.JsonSerializer.Serialize(transactionClass);
+                    var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                    var response = await client.PutAsync("api/transactionclass", content);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        // Sucesso
+                        TempData["SuccessMessages"] = new[] { "Sucesso: Dados atualizados com sucesso." };
+
+                        return RedirectToAction(nameof(Index));
+                    }
+                    if (response.StatusCode == HttpStatusCode.BadRequest)
+                    {
+                        var jsonErr = await response.Content.ReadAsStringAsync();
+                        var apiError = System.Text.Json.JsonSerializer.Deserialize<ApiError>(jsonErr, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
+
+                        var errorMessages = apiError!.ErrorMessages;
+
+
+                        TempData["ErrorMessages"] = errorMessages.ToArray();
+                    }
+                    else
+                    {
+                        // Falha
+                        throw new Exception("Ocorreu um erro na listagem!");
+                    }
+                }
+                catch
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+
                 return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
             }
         }
 
         // GET: TransactionClassController/Delete/5
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
-            return View();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+            client.BaseAddress = new Uri("http://localhost:5069");
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            var response = await client.GetAsync($"api/transactionclass/{id}");
+            if (response.IsSuccessStatusCode)
+            {
+                var assetClass = await response.Content.ReadAsAsync<TransactionClass>();
+
+                // Chama a view de confirmação de deleção passando o objeto como parâmetro
+                return PartialView(assetClass);
+            }
+            else
+            {
+                TempData["ErrorMessages"] = "Erro ao localizar o User !";
+                return RedirectToAction(nameof(Index));
+            }
+
         }
 
         // POST: TransactionClassController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public async Task<ActionResult> DeleteAsync(int id)
         {
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+            client.BaseAddress = new Uri("http://localhost:5069");
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             try
             {
-                return RedirectToAction(nameof(Index));
+                var response = await client.DeleteAsync($"api/transactionclass/{id}");
+                if (response.IsSuccessStatusCode)
+                {
+                    // Sucesso
+                    TempData["SuccessMessages"] = new[] { "Sucesso: Dados atualizados com sucesso." };
+
+                    return RedirectToAction(nameof(Index));
+                }
+                if (response.StatusCode == HttpStatusCode.BadRequest)
+                {
+                    var jsonErr = await response.Content.ReadAsStringAsync();
+                    var apiError = JsonSerializer.Deserialize<ApiError>(jsonErr, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
+
+                    var errorMessages = apiError!.ErrorMessages!;
+
+                    TempData["ErrorMessages"] = errorMessages.ToArray();
+                }
+                else
+                {
+                    // Falha
+                    throw new Exception("Ocorreu um erro na listagem!");
+                }
             }
             catch
             {
-                return View();
+                return RedirectToAction(nameof(Index));
             }
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }

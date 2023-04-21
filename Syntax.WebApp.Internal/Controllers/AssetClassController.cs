@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Syntax.WebApp.Internal.Models;
+using Syntax.WebApp.Internal.ViewModels;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -12,12 +13,15 @@ namespace Syntax.WebApp.Internal.Controllers
     public class AssetClassController : BaseController
     {
         HttpClient client;
+        private readonly IWebHostEnvironment _env;
 
 
-        public AssetClassController(IHttpClientFactory factory, ILogger<BaseController> baseLogger, IHttpContextAccessor httpContextAccessor)
+        public AssetClassController(IHttpClientFactory factory, ILogger<BaseController> baseLogger, IHttpContextAccessor httpContextAccessor, IWebHostEnvironment env)
             : base(baseLogger, httpContextAccessor)
         {
             client = factory.CreateClient();
+            _env = env;
+            
 
         }
 
@@ -56,8 +60,17 @@ namespace Syntax.WebApp.Internal.Controllers
         }
 
         // GET: AssetClassController/Create
-        public async Task<ActionResult> CreateAsync()
+        public IActionResult Create()
         {
+            var fileNames = Directory.GetFiles(Path.Combine(_env.WebRootPath, "Assets/AssetClass")).Select(Path.GetFileName);
+
+            var fileList = fileNames.Select(fn => new FileViewModel
+            {
+                ImageUrl = Url.Content($"~/Assets/{fn}"),
+                FileName = fn
+            }).ToList();
+
+            ViewBag.FileList = fileList;
             return PartialView();
         }
 
@@ -69,6 +82,25 @@ namespace Syntax.WebApp.Internal.Controllers
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
             client.BaseAddress = new Uri("http://localhost:5069");
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+
+
+            if (assetClass.IconFile != null && assetClass.IconFile.Length > 0)
+            {
+                var fileName = Path.GetFileName(assetClass.IconFile.FileName);
+                var filePath = Path.Combine("wwwroot", "Assets/AssetClass", fileName);
+
+                // Copia o arquivo para o diretório desejado
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await assetClass.IconFile.CopyToAsync(stream);
+                }
+
+                // Define o caminho relativo do arquivo para ser salvo na propriedade Icon
+                assetClass.Icon = Path.Combine("Assets/AssetClass", fileName);
+            }
+
+            assetClass.IconFile = null;
 
             try
             {
@@ -117,6 +149,18 @@ namespace Syntax.WebApp.Internal.Controllers
             if (response.IsSuccessStatusCode)
             {
                 var assetClass = await response.Content.ReadAsAsync<AssetClass>();
+
+                var currentFileName = assetClass.Icon;
+
+                var fileNames = Directory.GetFiles(Path.Combine(_env.WebRootPath, "Assets/AssetClass")).Select(Path.GetFileName);
+                var fileList = fileNames.Select(fn => new FileViewModel
+                {
+                    ImageUrl = Url.Content($"~/Assets/AssetClass/{fn}"),
+                    FileName = fn,
+                    IsSelected = (fn == currentFileName)
+                }).ToList();
+
+                ViewBag.FileList = fileList;
 
                 return PartialView(assetClass);
             }

@@ -4,7 +4,7 @@
 <hr />
 <div class="row">
     <div class="col-md">
-        <form asp-action="Create" method="post" enctype="multipart/form-data">
+        <form asp-action="Edit" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
@@ -32,7 +32,8 @@
                                 {
                                     <div class="col-md-3">
                                         <label>
-                                            <input type="radio" name="Icon" value="@file.ImageUrl" />
+                                            <input type="radio" name="Icon" value="@file.ImageUrl"
+                                            @(file.ImageUrl == Model.Icon ? "checked" : "") />
                                             <img src="@file.ImageUrl" />
                                         </label>
                                     </div>
@@ -41,11 +42,11 @@
                         </div>
 
                     }
-                    
+
                 </div>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="@Localizer["Save"]" class="btn btn-primary" />
             </div>
         </form>
     </div>
@@ -85,8 +86,8 @@
         }
 
     </style>
-    
-}
+    }
+
 
 @section Scripts {
     @{

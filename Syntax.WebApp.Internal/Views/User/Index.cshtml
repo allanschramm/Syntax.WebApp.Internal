@@ -90,7 +90,7 @@
                                         <td>
                                             @Html.DisplayFor(modelItem => item.IsEmailConfirmed)
                                         </td>
-                                        <td class="buttons-column" data-priority="1">
+                                        <td class="buttons-column buttons-cell" data-priority="1">
                                             <div>
                                                 <button class="btn btn-secondary editUser btn-block" data-value="@item.Id">@Localizer["Edit"]</button>
                                                 <button class="btn btn-danger deleteUser btn-block" data-value="@item.Id">@Localizer["Delete"]</button>
@@ -103,6 +103,7 @@
                     </div>
                 </div>
             </div>
+        </div>
     </section>
 </div>
 
@@ -165,15 +166,13 @@
 
 @section Css {
     <style>
-        .searchInput {
-            width: 50%;
+
+        .buttons-cell .btn {
+            height: 12px; /* altura dos botões */
+            line-height: 5px; /* espaçamento vertical entre o texto e o botão */
+            padding: 12px 8px; /* espaçamento interno do botão */
         }
 
-        .cardContent {
-            width: 100%
-        }
-
-      
     </style>
 }
 

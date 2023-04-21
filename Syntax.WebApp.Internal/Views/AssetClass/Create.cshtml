@@ -23,14 +23,32 @@
                                 <input asp-for="Description" class="form-control" required />
                                 <span asp-validation-for="Description" class="text-danger"></span>
                             </div>
+                            <div class="custom-file">
+                                <input asp-for="IconFile" type="file" class="custom-file-input" accept=".png">
+                                <label class="custom-file-label" for="IconFile">Escolher arquivo</label>
+                            </div>
+                            <hr />
                             <div class="form-group">
-                                <label for="finance-emoji-select">Selecione um emoji financeiro:</label>
-                                <select asp-for="Icon" class="form-control" id="finance-emoji-select">
-                                    <option value="💰"><i class="fas fa-money-bill"></i> 💰 Dinheiro</option>
-                                    <option value="💳"><i class="fas fa-credit-card"></i> 💳 Cartão de crédito</option>
-                                    <option value="🏦"><i class="fas fa-university"></i> 🏦 Banco</option>
-                                    <option value="💸"><i class="fas fa-money-check-alt"></i> 💸 Cheque</option>
-                                </select>
+                                <div class="row icon-list">
+                                    @if (ViewBag.FileList != null)
+                                    {
+                                        <div class="form-group">
+                                            <div class="row">
+                                                @foreach (var file in ViewBag.FileList)
+                                                {
+                                                    <div class="col-md-3">
+                                                        <label>
+                                                            <input type="radio" name="Icon" value="@file.ImageUrl" />
+                                                            <img src="@file.ImageUrl" />
+                                                        </label>
+                                                    </div>
+                                                }
+                                            </div>
+                                        </div>
+
+                                    }
+
+                                </div>
                             </div>
 
                             <div class="form-group">

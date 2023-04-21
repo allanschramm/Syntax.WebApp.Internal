@@ -26,6 +26,10 @@ builder.Services.Configure<RequestLocalizationOptions>(option =>
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
+
+builder.Services.AddHttpClient();
+
 // Service for HttpClient
 builder.Services.AddHttpClient();
 
@@ -52,7 +56,6 @@ if (!app.Environment.IsDevelopment())
 app.UseSession();
 
 
-app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
