@@ -10,6 +10,7 @@ builder.Services.AddLocalization(option => { option.ResourcesPath = "Resource"; 
 builder.Services.AddMvc().AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix).AddDataAnnotationsLocalization();
 builder.Services.AddHttpContextAccessor();
 
+
 builder.Services.Configure<RequestLocalizationOptions>(option =>
 {
     var vSupportCultures = new List<CultureInfo>

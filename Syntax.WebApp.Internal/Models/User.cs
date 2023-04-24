@@ -13,7 +13,7 @@ namespace Syntax.WebApp.Internal.Models
 
         [Required(ErrorMessage = "O sobrenome é obrigatório.")]
         [Column(TypeName = "nvarchar(30)")]
-        public string LastName { get; set; }
+        public string? LastName { get; set; }
 
         [Required(ErrorMessage = "O campo Email é obrigatório")]
         [Column(TypeName = "nvarchar(30)")]

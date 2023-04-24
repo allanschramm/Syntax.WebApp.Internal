@@ -119,7 +119,6 @@ namespace Syntax.WebApp.Internal.Controllers
             {
                 var user = await response.Content.ReadAsAsync<User>();
 
-                // Chama a view de confirmação de deleção passando o objeto como parâmetro
                 return PartialView(user);
             }
             else

@@ -56,6 +56,9 @@
                                     <th>
                                         @Html.DisplayNameFor(model => model.Grade)
                                     </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.CreationDate)
+                                    </th>
                                     <th class="buttons-column" data-priority="1">@Localizer["Actions"]</th>
                                 </tr>
                             </thead>
@@ -80,8 +83,11 @@
                                         </td>
                                         <td class="text-center">
                                             @Html.DisplayFor(modelItem => item.Grade)
+                                        </td>     
+                                        <td class="text-center">
+                                            @Html.DisplayFor(modelItem => item.CreationDate)
                                         </td>
-                                        <td class="buttons-column" data-priority="1">
+                                        <td class="buttons-column buttons-cell" data-priority="1">
                                             <div>
                                                 <button class="btn btn-secondary editAsset btn-block" data-value="@item.Id">@Localizer["Edit"]</button>
                                                 <button class="btn btn-danger deleteAsset btn-block" data-value="@item.Id">@Localizer["Delete"]</button>
@@ -174,6 +180,14 @@
         .cardContent {
             width: 100%
         }
+ 
+
+        .buttons-cell .btn {
+            height: 12px; /* altura dos botões */
+            line-height: 5px; /* espaçamento vertical entre o texto e o botão */
+            padding: 12px 8px; /* espaçamento interno do botão */
+        }
+
 
     </style>
 }

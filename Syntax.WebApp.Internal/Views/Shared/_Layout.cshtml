@@ -13,7 +13,7 @@
 
     <link rel="stylesheet" href="~/lib/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css" />
     <link rel="stylesheet" href="~/lib/toastr/toastr.min.css" />
-
+    <link rel="stylesheet" href="~/lib/waitme/waitMe.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
 
     @await RenderSectionAsync("Css", required: false)
@@ -22,6 +22,8 @@
     @Html.HiddenFor(m => System.Globalization.CultureInfo.CurrentCulture.Name)
     @Html.HiddenFor(m => System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator)
     @Html.HiddenFor(m => System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberGroupSeparator)
+
+
 
     <input type="hidden" id="CurrentCultureName" value="@System.Globalization.CultureInfo.CurrentCulture.Name" />
     <input type="hidden" id="CurrentCultureDecimal" value="@System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator" />
@@ -78,6 +80,7 @@
     <script src="~/lib/inputmask/jquery.inputmask.min.js"></script>
     <script src="~/lib/jquery-maskmoney/jquery.maskMoney.min.js"></script>
     <script src="~/lib/select2/js/select2.full.min.js"></script>
+    <script src="~/lib/waitme/waitMe.min.js"></script>
     <script src="~/lib/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
     <script src="~/lib/toastr/toastr.min.js"></script>
 

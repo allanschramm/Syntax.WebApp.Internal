@@ -12,6 +12,7 @@ namespace Syntax.WebApp.Internal.Models
         //public AssetClass AssetClass { get; set; }
         #endregion
         public int IdAssetClass { get; set; }
+        public DateTime? CreationDate { get; set; }
         public int Grade { get; set; }
         public virtual AssetClass? AssetClassNavigation { get; set; }
 

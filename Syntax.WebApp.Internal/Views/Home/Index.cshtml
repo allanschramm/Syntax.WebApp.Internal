@@ -9,30 +9,349 @@
                 <div class="col-sm-6">
                     <h1 class="m-0">@Localizer["Dashboard"]</h1>
                 </div>
-                <div class="col-sm-6">
-                </div>
             </div>
         </div>
     </div>
+
+    <div class="col-md-12">
+        <!-- USER CHART -->
+        <div class="card card-dark">
+            <div class="card-header">
+                <h3 class="card-title">User</h3>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                    <button type="button" class="btn btn-tool" data-card-widget="remove">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="content row">
+                    <div class="col-lg-6">
+                        <div class="card">
+                            <div class="card-header border-0">
+                                <div class="d-flex justify-content-between">
+                                    <h3 class="card-title">Users Created</h3>
+                                    <a href="javascript:void(0);">View Report</a>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="d-flex">
+                                    <p class="d-flex flex-column">
+                                        @{
+                                            var totalUsers = 0;
+                                            var percentUser = 0;
+                                        }
+                                        <span class="text-bold text-lg userByMonthTotal">Total Users: @totalUsers </span>
+                                        <span>Users Over Time</span>
+                                    </p>
+                                    <p class="ml-auto d-flex flex-column text-right">
+                                        <span class="text-success userByMonthPercent">
+                                            <i class="fas fa-arrow-up"></i> @percentUser%
+                                        </span>
+                                        <span class="text-muted userByMonthSince">Since last month</span>
+                                    </p>
+                                </div>
+
+                                <div class="position-relative mb-4" style="max-height: 300px;">
+                                    <canvas id="user-created-by-month-chart" width="200" height="200"></canvas>
+                                    <div class="loading">
+                                        <div class="loader"></div>
+                                    </div>
+                                </div>                                
+                            </div>
+                        </div>
+                        <!-- /.card -->
+
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="card">
+                            <div class="card-header border-0">
+                                <div class="d-flex justify-content-between">
+                                    <h3 class="card-title">Users Logon</h3>
+                                    <a href="javascript:void(0);">View Report</a>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="d-flex">
+                                    <p class="d-flex flex-column">
+                                        @{
+                                            var recentLogonUsers = 0;
+                                            var percentUserLogonByTotal = 0;
+                                        }
+                                        <span class="text-bold text-lg userLogonRecent">Recent Logon Users: @recentLogonUsers </span>
+                                        <span>Logged</span>
+                                    </p>
+                                    <p class="ml-auto d-flex flex-column text-right">
+                                        <span class="text-success userLogonPercent">
+                                            <i class="fas fa-arrow-up"></i> @percentUserLogonByTotal%
+                                        </span>
+                                        <span class="text-muted userLogon">Percent Users Logon / Total</span>
+                                    </p>
+                                </div>
+
+                                <div class="position-relative mb-4" style="max-height: 300px;">
+                                    <canvas id="user-login-by-day-chart" width="200" height="200"></canvas>
+                                    <div class="loading">
+                                        <div class="loader"></div>
+                                    </div>
+                                </div>
+                               
+                            </div>
+                        </div>
+                        <!-- /.card -->
+
+                    </div>
+                </div>
+
+            </div>
+            <!-- /.card-body -->
+        </div>
+
+        <!-- TRANSACTIONS CHART -->
+        <div class="card card-secondary">
+            <div class="card-header">
+                <h3 class="card-title">Transactions</h3>
+
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                    <button type="button" class="btn btn-tool" data-card-widget="remove">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <canvas id="pieChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+            </div>
+            <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+
+    </div>
 </div>
+@section Css{
+    <style>
 
-@section Scripts {
-    <script src="~/lib/daterangepicker/daterangepicker.js"></script>
-
-    <!-- DataTables  & Plugins -->
-    <script src="~/lib/datatables/jquery.dataTables.min.js"></script>
-    <script src="~/lib/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
-    <script src="~/lib/datatables-responsive/js/dataTables.responsive.min.js"></script>
-    <script src="~/lib/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
-    <script src="~/lib/datatables-buttons/js/dataTables.buttons.min.js"></script>
-    <script src="~/lib/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
-    <script src="~/lib/jszip/jszip.min.js"></script>
-    <script src="~/lib/pdfmake/pdfmake.min.js"></script>
-    <script src="~/lib/pdfmake/vfs_fonts.js"></script>
-    <script src="~/lib/datatables-buttons/js/buttons.html5.min.js"></script>
-    <script src="~/lib/datatables-buttons/js/buttons.print.min.js"></script>
-    <script src="~/lib/datatables-buttons/js/buttons.colVis.min.js"></script>
-    <script src="~/lib/chart.js/Chart.min.js"></script>
-    <script src="~/lib/pqGrid/pqgrid.min.js"></script>
-    <script src="~/lib/pqGrid/localize/pq-localize-pt-br.js"></script>
+    </style>
 }
+
+@section scripts{
+    <script src="~/lib/waitme/waitMe.min.js"></script>
+
+    <script>
+
+
+
+        $(document).ready(function () {
+            $('.waitMe_container').waitMe({
+                effect: 'bounce',
+                text: '',
+                bg: 'rgba(255,255,255,0.7)',
+                color: '#555',
+                maxSize: '',
+                waitTime: -1,
+                textPos: 'vertical',
+                fontSize: '',
+                source: '',
+                onClose: function () { }
+            });
+            getUserLogonByDay();
+            getUserCreateByMonth();
+
+        });
+
+        function getUserCreateByMonth() {
+            $('.loading').waitMe({
+                effect: 'bounce',
+                text: '',
+                bg: 'rgba(255,255,255,0.7)',
+                color: '#555',
+                maxSize: '',
+                waitTime: -1,
+                textPos: 'vertical',
+                fontSize: '',
+                source: '',
+                onClose: function () { }
+            });
+            $.ajax({
+                url: 'http://localhost:5069/api/dashboard/UserByMonth',
+                method: 'GET',
+                success: function (data) {
+                    $('.loading').waitMe('hide');
+
+                    UserByMonth(data);
+                }
+            });
+
+        };
+
+        function UserByMonth(data, totalUsers, percentUser) {
+            var datasets = [];
+            data.data.forEach(function (datum, i) {
+                var color = i % 2 == 0 ? 'rgb(153, 102, 255)' : 'rgb(204, 51, 255)';
+                datasets.push({
+                    label: datum.role,
+                    backgroundColor: color,
+                    borderColor: color,
+                    data: datum.counts,
+                    barPercentage: 0.8,
+                    categoryPercentage: 0.8
+                });
+            });
+
+            var chartData = {
+                labels: data.months.map(function (month) {
+                    return month.charAt(0).toUpperCase() + month.slice(1);
+                }),
+                datasets: datasets
+            };
+
+            var ctx = document.getElementById('user-created-by-month-chart').getContext('2d');
+            var userCreatedByMonthChart = new Chart(ctx, {
+                type: 'bar',
+                data: chartData,
+                options: {
+                    maintainAspectRatio: false,
+                    responsive: true,
+                    legend: {
+                        display: true,
+                        labels: {
+                            fontColor: '#333',
+                            fontSize: 14
+                        }
+                    },
+                    scales: {
+                        xAxes: [{
+                            stacked: false,
+                            ticks: {
+                                fontColor: '#333',
+                                fontSize: 14
+                            },
+                            gridLines: {
+                                display: true,
+                                color: '#ddd'
+                            }
+                        }],
+                        yAxes: [{
+                            stacked: false,
+                            ticks: {
+                                beginAtZero: true,
+                                fontColor: '#333',
+                                fontSize: 14,
+                                stepSize: 1
+                            },
+                            gridLines: {
+                                display: true,
+                                color: '#ddd'
+                            }
+                        }]
+                    }
+                }
+            });
+
+            // Adicionando as informações de usuários no HTML
+            var totalUsersElem = document.querySelector('.userByMonthTotal');
+            totalUsersElem.innerHTML = 'Total Users: ' + data.totalUsers;
+
+            var percentUserElem = document.querySelector('.userByMonthPercent');
+            percentUserElem.innerHTML = '<i class="fas fa-arrow-up"></i> ' + data.percentUser + '%';
+
+
+        }
+
+
+
+
+
+        function getUserLogonByDay() {
+            $('.loading').waitMe({
+                effect: 'bounce',
+                text: '',
+                bg: 'rgba(255,255,255,0.7)',
+                color: '#555',
+                maxSize: '',
+                waitTime: -1,
+                textPos: 'vertical',
+                fontSize: '',
+                source: '',
+                onClose: function () { }
+            });
+            $.ajax({
+                url: 'http://localhost:5069/api/dashboard/UserLogonByDay',
+                type: "GET",
+                dataType: "json",
+                success: function (data) {
+                    $('.loading').waitMe('hide');
+
+                    mountUserLogin(data);
+                },
+                error: function () {
+                    console.log("Erro ao buscar dados");
+                }
+            });
+        }
+
+        function mountUserLogin(data) {
+            var ctx = document.getElementById('user-login-by-day-chart').getContext('2d');
+            var chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: data.dates,
+                    datasets: [{
+                        label: 'User Logins',
+                        data: data.logonCounts,
+                        backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                        borderColor: 'rgba(153, 102, 255, 1)',
+                        borderWidth: 1,
+                        pointRadius: 3,
+                        pointBackgroundColor: 'rgba(153, 102, 255, 1)',
+                        pointBorderColor: 'rgba(153, 102, 255, 1)',
+                        pointHoverRadius: 5,
+                        pointHoverBackgroundColor: 'rgba(153, 102, 255, 1)',
+                        pointHoverBorderColor: 'rgba(153, 102, 255, 1)'
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    responsive: true,
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                min: 0,
+                                beginAtZero: true,
+                                callback: function (value) {
+                                    if (value % 1 === 0) {
+                                        return value;
+                                    }
+                                }
+                            }
+                        }]
+                    }
+                }
+            });
+
+
+            // Atualize as informações de recentLogonUsers e percentUserLogonByTotal
+            $('.userLogonRecent').text('Recent Logon Users: ' + data.recentLogonUsers);
+            $('.userLogonPercent').text(data.percentUserLogonByTotal + '%');
+
+            // Redesenha o gráfico com as novas informações
+            chart.data.datasets[0].data = data.logonCounts;
+            chart.data.labels = data.dates;
+            chart.update();
+
+
+        }
+
+
+
+
+
+    </script>
+
+
+    }

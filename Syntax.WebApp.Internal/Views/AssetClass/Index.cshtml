@@ -47,6 +47,9 @@
                                         @Html.DisplayNameFor(model => model.Description)
                                     </th>
                                     <th>
+                                        @Html.DisplayNameFor(model => model.CreationDate)
+                                    </th>
+                                    <th>
                                         @Html.DisplayNameFor(model => model.Icon)
                                     </th>
                                     <th class="buttons-column" data-priority="1">@Localizer["Actions"]</th>
@@ -64,6 +67,9 @@
                                         </td>
                                         <td>
                                             @Html.DisplayFor(modelItem => item.Description)
+                                        </td> 
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.CreationDate)
                                         </td>
                                         <td class="text-center">
                                             <object data="@Url.Content(item.Icon)">

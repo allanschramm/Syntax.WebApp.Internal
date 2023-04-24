@@ -14,6 +14,7 @@ namespace Syntax.WebApp.Internal.Models
         [Key] public int Id { get; set; }
         public decimal Value { get; set; }
         public string? Description { get; set; }
+
         public DateTime Date { get; set; } = DateTime.Now;
         public EventTypeTransaction Type { get; set; }
         #region ALTERAÇÃO DE ABORDAGEM

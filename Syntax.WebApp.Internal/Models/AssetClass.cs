@@ -7,6 +7,7 @@ namespace Syntax.WebApp.Internal.Models
         [Key] public int Id { get; set; }
         [Required(ErrorMessage = "O campo Nome é obrigatório.")]
         public string? Name { get; set; }
+        public DateTime? CreationDate { get; set; }
 
         [Required(ErrorMessage = "O campo Descrição é obrigatório.")]
         public string? Description { get; set; }
