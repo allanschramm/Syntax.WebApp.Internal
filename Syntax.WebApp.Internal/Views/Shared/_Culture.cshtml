@@ -9,6 +9,6 @@
 
 <div>
     <form asp-action="CultureManagement" asp-controller="Home" method="post" asp-route-returnUrl="@returnURL">
-        <select name="Culture" asp-for="@culture.RequestCulture.UICulture.Name" asp-items="cultureList" onchange="this.form.submit();" class="custom-select rounded-0"></select>
+        <select name="Culture" asp-for="@culture.RequestCulture.UICulture.Name" asp-items="cultureList" onchange="this.form.submit();" class="custom-select rounded-0" disabled></select>
     </form>
 </div>
