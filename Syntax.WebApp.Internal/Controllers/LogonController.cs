@@ -57,12 +57,12 @@ namespace Syntax.WebApp.Internal.Controllers
                 else
                 {
                     string erro = $"{response.StatusCode} - {response.ReasonPhrase}";
-                    throw new Exception(erro);
+                    return View("_Error", erro);
                 }
             }
             catch (Exception ex)
             {
-                return View("_Erro", ex);
+                return View("_Error", ex.Message);
             }
         }
 

@@ -45,7 +45,7 @@ namespace Syntax.WebApp.Internal.Controllers
             }
             catch (Exception ex)
             {
-                return View("_Erro", ex);
+                return View("_Error", ex);
             }
         }
 

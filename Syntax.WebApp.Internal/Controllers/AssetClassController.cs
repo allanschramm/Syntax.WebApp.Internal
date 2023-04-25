@@ -43,12 +43,13 @@ namespace Syntax.WebApp.Internal.Controllers
                 }
                 else
                 {
+
                     throw new Exception("Ocorreu um erro na listagem!");
                 }
             }
             catch (Exception ex)
             {
-                return View("_Erro", ex);
+                return View("_Error", ex);
             }
         }
 
