@@ -23,7 +23,7 @@ namespace Syntax.WebApp.Internal.Controllers
         public async Task<ActionResult> Index()
         {
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-            client.BaseAddress = new Uri("http://localhost:5069");
+            client.BaseAddress = new Uri("https://syntaxapi.azurewebsites.net/");
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
             try
@@ -67,7 +67,7 @@ namespace Syntax.WebApp.Internal.Controllers
         public async Task<ActionResult> CreateAsync(Asset asset)
         {
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-            client.BaseAddress = new Uri("http://localhost:5069");
+            client.BaseAddress = new Uri("https://syntaxapi.azurewebsites.net/");
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
             try
@@ -111,7 +111,7 @@ namespace Syntax.WebApp.Internal.Controllers
         public async Task<ActionResult> Edit(int id)
         {
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-            client.BaseAddress = new Uri("http://localhost:5069");
+            client.BaseAddress = new Uri("https://syntaxapi.azurewebsites.net/");
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             var assetClassList = await GetAssetClassList();
             ViewBag.AssetClass = assetClassList;
@@ -131,7 +131,7 @@ namespace Syntax.WebApp.Internal.Controllers
         private async Task<List<AssetClass>> GetAssetClassList()
         {
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-            client.BaseAddress = new Uri("http://localhost:5069");
+            client.BaseAddress = new Uri("https://syntaxapi.azurewebsites.net/");
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
             var response = await client.GetAsync("api/assetclass/");
@@ -147,7 +147,7 @@ namespace Syntax.WebApp.Internal.Controllers
         {
             {
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-                client.BaseAddress = new Uri("http://localhost:5069");
+                client.BaseAddress = new Uri("https://syntaxapi.azurewebsites.net/");
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
                 try
@@ -193,7 +193,7 @@ namespace Syntax.WebApp.Internal.Controllers
         public async Task<ActionResult> Delete(int id)
         {
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-            client.BaseAddress = new Uri("http://localhost:5069");
+            client.BaseAddress = new Uri("https://syntaxapi.azurewebsites.net/");
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             var response = await client.GetAsync($"api/asset/{id}");
             if (response.IsSuccessStatusCode)
@@ -216,7 +216,7 @@ namespace Syntax.WebApp.Internal.Controllers
         public async Task<ActionResult> DeleteAsync(int id)
         {
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-            client.BaseAddress = new Uri("http://localhost:5069");
+            client.BaseAddress = new Uri("https://syntaxapi.azurewebsites.net/");
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             try
             {

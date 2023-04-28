@@ -27,7 +27,7 @@ builder.Services.Configure<RequestLocalizationOptions>(option =>
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
+builder.Services.AddRazorPages();
 
 builder.Services.AddHttpClient();
 

@@ -26,7 +26,7 @@ namespace Syntax.WebApp.Internal.Controllers
         // GET: TransactionClassController
         public async Task<ActionResult> Index()
         {
-            client.BaseAddress = new Uri("http://localhost:5069");
+            client.BaseAddress = new Uri("https://syntaxapi.azurewebsites.net/");
             client.DefaultRequestHeaders.Accept.Add(new
                 MediaTypeWithQualityHeaderValue("application/json"));
 
@@ -77,7 +77,7 @@ namespace Syntax.WebApp.Internal.Controllers
         public async Task<ActionResult> CreateAsync(TransactionClass transactionClass)
         {
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-            client.BaseAddress = new Uri("http://localhost:5069");
+            client.BaseAddress = new Uri("https://syntaxapi.azurewebsites.net/");
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
 
@@ -140,7 +140,7 @@ namespace Syntax.WebApp.Internal.Controllers
         public async Task<ActionResult> Edit(int id)
         {
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-            client.BaseAddress = new Uri("http://localhost:5069");
+            client.BaseAddress = new Uri("https://syntaxapi.azurewebsites.net/");
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
             var response = await client.GetAsync($"api/transactionclass/{id}");
@@ -176,7 +176,7 @@ namespace Syntax.WebApp.Internal.Controllers
         {
             {
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-                client.BaseAddress = new Uri("http://localhost:5069");
+                client.BaseAddress = new Uri("https://syntaxapi.azurewebsites.net/");
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
                 try
@@ -222,7 +222,7 @@ namespace Syntax.WebApp.Internal.Controllers
         public async Task<ActionResult> Delete(int id)
         {
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-            client.BaseAddress = new Uri("http://localhost:5069");
+            client.BaseAddress = new Uri("https://syntaxapi.azurewebsites.net/");
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             var response = await client.GetAsync($"api/transactionclass/{id}");
             if (response.IsSuccessStatusCode)
@@ -246,7 +246,7 @@ namespace Syntax.WebApp.Internal.Controllers
         public async Task<ActionResult> DeleteAsync(int id)
         {
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-            client.BaseAddress = new Uri("http://localhost:5069");
+            client.BaseAddress = new Uri("https://syntaxapi.azurewebsites.net/");
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             try
             {

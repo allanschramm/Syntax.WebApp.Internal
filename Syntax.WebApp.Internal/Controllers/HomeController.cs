@@ -30,7 +30,7 @@ namespace Syntax.WebApp.Internal.Controllers
         public async Task<JsonResult> GetDashboard()
         {
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-            client.BaseAddress = new Uri("http://localhost:5069");
+            client.BaseAddress = new Uri("https://syntaxapi.azurewebsites.net/");
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
             try
