@@ -391,50 +391,41 @@
         }
 
         function renderTransactionByClassAndType(data) {
-            var datasets = [];
-            var colors = [
-                'rgb(255, 99, 132)',
-                'rgb(54, 162, 235)',
-                'rgb(255, 205, 86)',
-                'rgb(75, 192, 192)',
-                'rgb(153, 102, 255)',
-                'rgb(255, 159, 64)',
-                'rgb(255, 99, 132)',
-                'rgb(54, 162, 235)',
-                'rgb(255, 205, 86)',
-                'rgb(75, 192, 192)',
-                'rgb(153, 102, 255)',
-                'rgb(255, 159, 64)'
-            ];
-
-            var chartData = {
-                labels: data.map(function (datum) {
-                    var totalTypeQuantity = datum.typeQuantity.reduce(function (total, currentType) {
-                        return total + currentType.quantity;
-                    }, 0);
-
-                    var typePercentage = datum.typeQuantity.map(function (type) {
-                        return ((type.quantity / totalTypeQuantity) * 100).toFixed(2) + '%';
-                    });
-
-                    return datum.transactionClass + ' (' + typePercentage.join(', ') + ')';
-                }),
-                datasets: datasets
-            };
+            var labels = [];
+            var backgroundColors = [];
+            var dataValues = [];
 
             data.forEach(function (datum, i) {
-                var color = colors[i % colors.length];
-                var typeQuantity = datum.typeQuantity.map(function (type) {
+                var totalTypeQuantity = datum.typeQuantity.reduce(function (total, currentType) {
+                    return total + currentType.quantity;
+                }, 0);
+
+                var typePercentages = datum.typeQuantity.map(function (type) {
+                    var percentage = ((type.quantity / totalTypeQuantity) * 100).toFixed(2);
+                    return percentage;
+                });
+
+                var label = datum.transactionClass + ' (' + typePercentages.join(', ') + '%)';
+                labels.push(label);
+
+                var color = getRandomColor();
+                backgroundColors.push(color);
+
+                var typeQuantities = datum.typeQuantity.map(function (type) {
                     return type.quantity;
                 });
 
-                datasets.push({
-                    label: datum.transactionClass,
-                    backgroundColor: color,
-                    borderColor: '#fff',
-                    data: typeQuantity
-                });
+                dataValues.push(typeQuantities);
             });
+
+            var chartData = {
+                labels: labels,
+                datasets: [{
+                    data: dataValues,
+                    backgroundColor: backgroundColors,
+                    borderColor: '#fff'
+                }]
+            };
 
             var ctx = document.getElementById('transaction-by-class-and-type-chart').getContext('2d');
             var transactionByClassAndTypeChart = new Chart(ctx, {
@@ -467,10 +458,10 @@
 
             var totalQuantityElem = document.querySelector('.transactionByClassAndTypeTotalQuantity');
             totalQuantityElem.innerHTML = 'Total Quantity: ' + data[0].totalQuantity;
+
             renderAssetClassList(data);
-
-
         }
+
 
         function renderAssetClassList(data) {
             var totalTypeQuantity = data.reduce(function (total, datum) {
@@ -488,7 +479,14 @@
             container.insertAdjacentHTML('beforeend', assetClassListHtml);
         }
 
-
+        function getRandomColor() {
+            var letters = '0123456789ABCDEF';
+            var color = '#';
+            for (var i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
 
     </script>
 
