@@ -224,7 +224,7 @@
 
 
             $.ajax({
-                url: 'http://localhost:5069/api/dashboard/UserByMonth',
+                url: 'http://syntaxinternal.azurewebsites.net:5069/api/dashboard/UserByMonth',
                 method: 'GET',
                 success: function (data) {
 
@@ -315,7 +315,7 @@
         function getUserLogonByDay() {
 
             $.ajax({
-                url: 'http://localhost:5069/api/dashboard/UserLogonByDay',
+                url: 'http://syntaxinternal.azurewebsites.net:5069/api/dashboard/UserLogonByDay',
                 type: "GET",
                 dataType: "json",
                 success: function (data) {
@@ -382,7 +382,7 @@
 
         function getTransactionByClassAndType() {
             $.ajax({
-                url: 'http://localhost:5069/api/Dashboard/TransactionByClassAndType',
+                url: 'http://syntaxinternal.azurewebsites.net:5069/api/Dashboard/TransactionByClassAndType',
                 method: 'GET',
                 success: function (data) {
                     renderTransactionByClassAndType(data);

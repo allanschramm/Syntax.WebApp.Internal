@@ -30,7 +30,7 @@ namespace Syntax.WebApp.Internal.Controllers
         public async Task<IActionResult> Logon(Logon logon)
         {
 
-            client.BaseAddress = new Uri("http://localhost:5069");
+            client.BaseAddress = new Uri("http://syntaxinternal.azurewebsites.net:5069");
             client.DefaultRequestHeaders.Accept.Add(new
                 MediaTypeWithQualityHeaderValue("application/json"));
 
