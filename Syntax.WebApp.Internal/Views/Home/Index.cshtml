@@ -224,7 +224,7 @@
 
 
             $.ajax({
-                url: 'http://syntaxinternal.azurewebsites.net:5069/api/dashboard/UserByMonth',
+                url: 'https://syntaxapi.azurewebsites.net/api/dashboard/UserByMonth',
                 method: 'GET',
                 success: function (data) {
 
@@ -315,7 +315,7 @@
         function getUserLogonByDay() {
 
             $.ajax({
-                url: 'http://syntaxinternal.azurewebsites.net:5069/api/dashboard/UserLogonByDay',
+                url: 'https://syntaxapi.azurewebsites.net/api/dashboard/UserLogonByDay',
                 type: "GET",
                 dataType: "json",
                 success: function (data) {
@@ -382,7 +382,7 @@
 
         function getTransactionByClassAndType() {
             $.ajax({
-                url: 'http://syntaxinternal.azurewebsites.net:5069/api/Dashboard/TransactionByClassAndType',
+                url: 'https://syntaxapi.azurewebsites.net/api/Dashboard/TransactionByClassAndType',
                 method: 'GET',
                 success: function (data) {
                     renderTransactionByClassAndType(data);
@@ -400,12 +400,13 @@
                     return total + currentType.quantity;
                 }, 0);
 
-                var typePercentages = datum.typeQuantity.map(function (type) {
-                    var percentage = ((type.quantity / totalTypeQuantity) * 100).toFixed(2);
-                    return percentage;
-                });
+                //var typePercentages = datum.typeQuantity.map(function (type) {
+                //    //var percentage = ((type / totalTypeQuantity) * 100).toFixed(2);
 
-                var label = datum.transactionClass + ' (' + typePercentages.join(', ') + '%)';
+                //    return percentage;
+                //});
+
+                var label = datum.transactionClass + ' (' + datum.typePercentages[0].percentage.toFixed(2) + '%)';
                 labels.push(label);
 
                 var color = getRandomColor();
@@ -470,8 +471,7 @@
 
             var assetClassListHtml = '<ul>';
             data.forEach(function (datum) {
-                var percentage = ((datum.totalQuantity / totalTypeQuantity) * 100).toFixed(2) + '%';
-                assetClassListHtml += '<li>' + datum.transactionClass + ': ' + percentage + '-' + ' Quantidade: ' + datum.totalQuantity + ' ' + '</li>';
+                assetClassListHtml += '<li>' + datum.transactionClass + ': ' + datum.typePercentages[0].percentage.toFixed(2) + '-' + ' Quantidade: ' + datum.totalQuantity + ' ' + '</li>';
             });
             assetClassListHtml += '</ul>';
 
